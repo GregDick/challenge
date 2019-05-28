@@ -1,0 +1,5 @@
+Sample Android application that queries the Github API and presents results
+
+Follows MVI architecture and material design
+
+Tested with JUnit and Android UI tests
