@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Challenge</string>
-    <string name="search_title">searchMenuOption</string>
+    <string name="app_name">Code Challenge</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Type a repo name…</string>
 </resources>
