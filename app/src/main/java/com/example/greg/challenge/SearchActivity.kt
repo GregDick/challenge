@@ -1,23 +1,39 @@
 package com.example.greg.challenge
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
+import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
+import android.view.View
+import com.example.greg.challenge.Search.SearchPresenter
 import com.example.greg.challenge.Search.SearchScreenView
-import com.example.greg.challenge.Search.SearchState
+import com.example.greg.challenge.Search.SearchScreenViewState
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity(), SearchScreenView {
 
+    private var searchQuery = ""
+
+    //replace with dependency injection
+    private val searchPresenter = SearchPresenter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        searchPresenter.bind(this)
+
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        searchPresenter.unbind()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -26,8 +42,8 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     text_view.text = query
-                    //todo emit search query intent
-                    searchIntent(query?: "")
+                    searchQuery = query ?: ""
+                    emitSearchQueryIntent()
                     return true
                 }
 
@@ -39,16 +55,17 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         return true
     }
 
-    override fun searchIntent(searchQuery: String): Observable<String> {
+    override fun emitSearchQueryIntent(): Observable<String> {
+        Log.d(SEARCH_ACTIVITY_LOG_TAG, "emitSearchQueryIntent $searchQuery")
         return Observable.just(searchQuery)
     }
 
-    override fun render(searchState: SearchState) {
-        when (searchState) {
-            is SearchState.ClearState -> renderClearState()
-            is SearchState.LoadingState -> renderLoadingState()
-            is SearchState.DataState -> renderDataState(searchState.repoList)
-            is SearchState.ErrorState -> renderErrorState(searchState.error)
+    override fun render(searchScreenViewState: SearchScreenViewState) {
+        when (searchScreenViewState) {
+            is SearchScreenViewState.ClearState -> renderClearState()
+            is SearchScreenViewState.LoadingState -> renderLoadingState()
+            is SearchScreenViewState.DataState -> renderDataState(searchScreenViewState.repoList)
+            is SearchScreenViewState.ErrorState -> renderErrorState(searchScreenViewState.error)
         }
     }
 

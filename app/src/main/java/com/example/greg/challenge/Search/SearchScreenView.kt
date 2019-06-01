@@ -5,14 +5,14 @@ import io.reactivex.Observable
 interface SearchScreenView {
 
     /**
-     * Renders the view (SearchActivity) based on the SearchState
+     * Renders the view (SearchActivity) based on the SearchScreenViewState
      */
-    fun render(searchState: SearchState)
+    fun render(searchScreenViewState: SearchScreenViewState)
 
     /**
-     * The search intent
+     * The search query intent
      *
      * @return An observable emitting the search query text
      */
-    fun searchIntent(searchQuery: String): Observable<String>
+    fun emitSearchQueryIntent(): Observable<String>
 }
