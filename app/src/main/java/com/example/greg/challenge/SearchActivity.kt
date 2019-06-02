@@ -1,22 +1,22 @@
 package com.example.greg.challenge
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.example.greg.challenge.Search.SearchPresenter
 import com.example.greg.challenge.Search.SearchScreenView
 import com.example.greg.challenge.Search.SearchScreenViewState
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_search.*
+import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private var searchQuery = ""
+    private lateinit var searchQueryIntent : Observable<CharSequence>
 
     //replace with dependency injection
     private val searchPresenter = SearchPresenter()
@@ -24,8 +24,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        searchPresenter.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -41,23 +39,29 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         (menu.findItem(R.id.search).actionView as SearchView).apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    text_view.text = query
-                    searchQuery = query ?: ""
-                    emitSearchQueryIntent()
+                    text_view.text = query //just for testing
                     return true
                 }
 
-                override fun onQueryTextChange(query: String?): Boolean { return true }
+                override fun onQueryTextChange(query: String?): Boolean { return false }
             })
+
+            searchQueryIntent = queryTextChanges()
+                .skipInitialValue()
+                .filter{ queryString -> queryString.length > 3 || queryString.isEmpty() }
+                .debounce(500, TimeUnit.MILLISECONDS)
 
             queryHint = getString(R.string.search_hint)
         }
+
+        searchPresenter.bind(this)  //todo: does this really have to be here? ideally this should go in onCreate()
+
         return true
     }
 
-    override fun emitSearchQueryIntent(): Observable<String> {
+    override fun emitSearchQueryIntent(): Observable<CharSequence> {
         Log.d(SEARCH_ACTIVITY_LOG_TAG, "emitSearchQueryIntent $searchQuery")
-        return Observable.just(searchQuery)
+        return searchQueryIntent
     }
 
     override fun render(searchScreenViewState: SearchScreenViewState) {

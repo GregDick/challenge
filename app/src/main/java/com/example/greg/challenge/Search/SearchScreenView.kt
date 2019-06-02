@@ -1,6 +1,7 @@
 package com.example.greg.challenge.Search
 
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 
 interface SearchScreenView {
 
@@ -14,5 +15,5 @@ interface SearchScreenView {
      *
      * @return An observable emitting the search query text
      */
-    fun emitSearchQueryIntent(): Observable<String>
+    fun emitSearchQueryIntent(): Observable<CharSequence>
 }
