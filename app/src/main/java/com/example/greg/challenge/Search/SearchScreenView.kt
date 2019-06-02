@@ -1,19 +1,19 @@
 package com.example.greg.challenge.Search
 
+import com.example.greg.challenge.MVI.BaseView
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 
-interface SearchScreenView {
+interface SearchScreenView : BaseView<SearchScreenViewState>{
 
     /**
      * Renders the view (SearchActivity) based on the SearchScreenViewState
      */
-    fun render(searchScreenViewState: SearchScreenViewState)
+    override fun render(viewState: SearchScreenViewState)
 
     /**
      * The search query intent
      *
      * @return An observable emitting the search query text
      */
-    fun emitSearchQueryIntent(): Observable<CharSequence>
+    fun searchQueryIntent(): Observable<CharSequence>
 }

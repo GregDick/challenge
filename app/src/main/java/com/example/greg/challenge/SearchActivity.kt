@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import com.example.greg.challenge.Search.SearchPresenter
+import com.example.greg.challenge.Search.SearchViewModel
 import com.example.greg.challenge.Search.SearchScreenView
 import com.example.greg.challenge.Search.SearchScreenViewState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
@@ -15,11 +15,10 @@ import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity(), SearchScreenView {
 
-    private var searchQuery = ""
-    private lateinit var searchQueryIntent : Observable<CharSequence>
-
     //replace with dependency injection
-    private val searchPresenter = SearchPresenter()
+    private val searchViewModel = SearchViewModel()
+
+    private lateinit var searchQueryIntent : Observable<CharSequence>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     override fun onDestroy() {
         super.onDestroy()
-        searchPresenter.unbind()
+        searchViewModel.unbind()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,13 +53,13 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             queryHint = getString(R.string.search_hint)
         }
 
-        searchPresenter.bind(this)  //todo: does this really have to be here? ideally this should go in onCreate()
+        searchViewModel.bind(this)  //todo: does this really have to be here? ideally this should go in onCreate()
 
         return true
     }
 
-    override fun emitSearchQueryIntent(): Observable<CharSequence> {
-        Log.d(SEARCH_ACTIVITY_LOG_TAG, "emitSearchQueryIntent $searchQuery")
+    override fun searchQueryIntent(): Observable<CharSequence> {
+        Log.d(SEARCH_ACTIVITY_LOG_TAG, "searchQueryIntent")
         return searchQueryIntent
     }
 
