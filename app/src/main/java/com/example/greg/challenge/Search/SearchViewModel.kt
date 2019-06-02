@@ -35,28 +35,21 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
+        searchProcessor.unbind()
     }
 
     private fun mapIntentsToActions() {
         searchQueryAction = view.searchQueryIntent()
-            .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 Log.d(SEARCH_TAG, "subscribed to observeSearchQueryIntent")
             }
-            .doOnNext {
-                Log.d(SEARCH_TAG, "observeSearchQueryAction $it")
-                //todo: should I emit something here? currently this does nothing
-            }
+
+        //we don't need to modify anything about the search query so this action
+        // is just the original search query intent observable being passed along
     }
 
     fun searchQueryAction(): Observable<CharSequence> {
-        Log.d(SEARCH_TAG, "searchQueryAction observable")
         return searchQueryAction
-    }
-
-    private fun observeSearchQueryAction(): Disposable {
-        Log.d(SEARCH_TAG, "subscribed to searchQueryAction observable")
-        return searchQueryAction.subscribe()
     }
 
     companion object{

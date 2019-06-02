@@ -2,8 +2,8 @@ package com.example.greg.challenge.Search
 
 import android.util.Log
 import com.example.greg.challenge.GithubApiService
+import com.example.greg.challenge.GithubSearchResponse
 import com.example.greg.challenge.MVI.BaseProcessor
-import com.example.greg.challenge.Model
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -24,7 +24,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     }
 
     private fun observeSearchQueryAction(): Disposable {
-        Log.d(SEARCH_TAG, "observeSearchQueryAction")
         return viewModel.searchQueryAction()
             .doOnNext { compositeDisposable.add(searchGithubRepos(it)) }
             .doOnSubscribe { Log.d(SEARCH_TAG, "subscribed to searchQueryAction") }
@@ -58,7 +57,7 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
         Log.d(SEARCH_TAG, "searchQueryResult onComplete")
     }
 
-    private fun logResponse(result: Model.Repo?) {
+    private fun logResponse(result: GithubSearchResponse) {
         Log.d(SEARCH_TAG, result.toString())
     }
 

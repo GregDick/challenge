@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface GithubApiService {
 
     @GET(GITHUB_SEARCH_ENDPOINT)
-    fun searchRepos(@Query("q") query: String): Observable<Model.Repo>
+    fun searchRepos(@Query("q") query: String): Observable<GithubSearchResponse>
 
     companion object {
         fun create(): GithubApiService {
