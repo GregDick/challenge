@@ -3,12 +3,11 @@ package com.example.greg.challenge.Search
 import android.util.Log
 import com.example.greg.challenge.MVI.BaseViewModel
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-class SearchViewModel : BaseViewModel {
+class SearchViewModel : BaseViewModel<SearchScreenView> {
     //todo use dependency injection
     private val searchProcessor = SearchProcessor()
 
@@ -48,7 +47,7 @@ class SearchViewModel : BaseViewModel {
             }
     }
 
-    fun searchQueryAction(): ObservableSource<CharSequence> {
+    fun searchQueryAction(): Observable<CharSequence> {
         Log.d(SEARCH_VIEW_MODEL_TAG, "searchQueryAction observable")
         return searchQueryAction
     }

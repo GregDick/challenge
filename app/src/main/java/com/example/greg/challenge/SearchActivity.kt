@@ -63,12 +63,12 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         return searchQueryIntent
     }
 
-    override fun render(searchScreenViewState: SearchScreenViewState) {
-        when (searchScreenViewState) {
+    override fun render(viewState: SearchScreenViewState) {
+        when (viewState) {
             is SearchScreenViewState.ClearState -> renderClearState()
             is SearchScreenViewState.LoadingState -> renderLoadingState()
-            is SearchScreenViewState.DataState -> renderDataState(searchScreenViewState.repoList)
-            is SearchScreenViewState.ErrorState -> renderErrorState(searchScreenViewState.error)
+            is SearchScreenViewState.DataState -> renderDataState(viewState.repoList)
+            is SearchScreenViewState.ErrorState -> renderErrorState(viewState.error)
         }
     }
 
