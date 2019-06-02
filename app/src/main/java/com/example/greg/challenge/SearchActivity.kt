@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import com.example.greg.challenge.Search.SearchProcessor.Companion.SEARCH_TAG
 import com.example.greg.challenge.Search.SearchViewModel
 import com.example.greg.challenge.Search.SearchScreenView
 import com.example.greg.challenge.Search.SearchScreenViewState
@@ -59,7 +60,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     }
 
     override fun searchQueryIntent(): Observable<CharSequence> {
-        Log.d(SEARCH_ACTIVITY_LOG_TAG, "searchQueryIntent")
+        Log.d(SEARCH_TAG, "emit searchQueryIntent observable")
         return searchQueryIntent
     }
 

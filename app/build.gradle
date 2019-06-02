@@ -30,8 +30,8 @@ dependencies {
 
 //    Libs
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"
-    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
 
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-drawerlayout:3.0.0-alpha2'
@@ -42,6 +42,9 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-viewpager:3.0.0-alpha2'
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.5.0"
+    implementation 'com.squareup.retrofit2:converter-moshi:2.5.0'
+    implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'

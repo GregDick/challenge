@@ -2,6 +2,7 @@ package com.example.greg.challenge.Search
 
 import android.util.Log
 import com.example.greg.challenge.MVI.BaseViewModel
+import com.example.greg.challenge.Search.SearchProcessor.Companion.SEARCH_TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +22,7 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
 
         mapIntentsToActions()
 
-        compositeDisposable.add(observeSearchQueryIntent())
+//        compositeDisposable.add(observeSearchQueryAction())
 
         searchProcessor.bind(this)
     }
@@ -40,19 +41,21 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
         searchQueryAction = view.searchQueryIntent()
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                Log.d(SEARCH_VIEW_MODEL_TAG, "subscribed to observeSearchQueryIntent")
+                Log.d(SEARCH_TAG, "subscribed to observeSearchQueryIntent")
             }
             .doOnNext {
-                Log.d(SEARCH_VIEW_MODEL_TAG, "observeSearchQueryIntent $it")
+                Log.d(SEARCH_TAG, "observeSearchQueryAction $it")
+                //todo: should I emit something here? currently this does nothing
             }
     }
 
     fun searchQueryAction(): Observable<CharSequence> {
-        Log.d(SEARCH_VIEW_MODEL_TAG, "searchQueryAction observable")
+        Log.d(SEARCH_TAG, "searchQueryAction observable")
         return searchQueryAction
     }
 
-    private fun observeSearchQueryIntent(): Disposable {
+    private fun observeSearchQueryAction(): Disposable {
+        Log.d(SEARCH_TAG, "subscribed to searchQueryAction observable")
         return searchQueryAction.subscribe()
     }
 
