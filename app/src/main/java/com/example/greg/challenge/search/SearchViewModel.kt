@@ -57,6 +57,7 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
                 view.render(reduceResultToState(it))
             }, {
                 Log.d(SEARCH_TAG, "onError searchResultObservable: $it")
+                view.render(SearchScreenViewState.ErrorState(it.message.toString()))
             })
         compositeDisposable.add(stateDisposable)
     }
