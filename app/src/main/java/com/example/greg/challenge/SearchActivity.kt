@@ -121,12 +121,18 @@ class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.Re
         toolbarSearchView.hideKeyboard()
 
         val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG) as ResultsFragment?
+        val detailFragment = supportFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG) as DetailFragment?
 
         if(resultsFragment == null){
             startResultsFragment(repoList)
         }
         else {
-            resultsFragment.renderDataView(repoList)
+            if(detailFragment != null) {
+                startResultsFragment(repoList)
+            }
+             else {
+                resultsFragment.renderDataView(repoList)
+            }
         }
     }
 
@@ -156,6 +162,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.Re
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
+            .addToBackStack(null)
             .commit()
     }
 
