@@ -3,13 +3,12 @@ package com.example.greg.challenge.search
 import android.util.Log
 import com.example.greg.challenge.GithubApiService
 import com.example.greg.challenge.GithubSearchResponse
-import com.example.greg.challenge.mvi.BaseProcessor
 import com.example.greg.challenge.Repo
+import com.example.greg.challenge.mvi.BaseProcessor
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlin.collections.ArrayList
 
 class SearchProcessor : BaseProcessor<SearchViewModel> {
 
@@ -49,7 +48,7 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
             .subscribe({
                 Log.d(SEARCH_TAG, "onNext searchQueryAction: $it")
                 searchResult = searchGithubRepos(it)
-                viewModel.subscribeToSearchResult()
+                viewModel.subscribeToSearchResult() //todo: can this be called from a better place? searchResult must exist before viewModel can subscribe to it...
             }, {
                 Log.d(SEARCH_TAG, "onError searchQueryAction: $it")
             }, {
@@ -72,10 +71,11 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
             }
     }
 
-    private fun generateListFromResponse(response : GithubSearchResponse) : ArrayList<Repo>{
+    private fun generateListFromResponse(response: GithubSearchResponse): ArrayList<Repo> {
         var responseList = arrayListOf<Repo>()
         if (response.items.isNotEmpty()) {
-             responseList = response.items.filterIsInstance<Repo>() as ArrayList<Repo>
+            responseList = response.items.filterIsInstance<Repo>() as ArrayList<Repo>
+            responseList = responseList.subList(0, 19) as ArrayList<Repo> //todo: can I tell the API to only give me 20 items in the response?
         }
         return responseList
     }

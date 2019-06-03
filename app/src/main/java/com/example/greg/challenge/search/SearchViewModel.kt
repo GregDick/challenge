@@ -1,8 +1,8 @@
 package com.example.greg.challenge.search
 
 import android.util.Log
-import com.example.greg.challenge.mvi.BaseViewModel
 import com.example.greg.challenge.Repo
+import com.example.greg.challenge.mvi.BaseViewModel
 import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +16,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
 
     private lateinit var view : SearchScreenView
     private lateinit var searchQueryAction : Observable<CharSequence>
-    private lateinit var searchViewStateObservable : Observable<SearchScreenViewState>
 
     override fun bind(view : SearchScreenView) {
         Log.d(SEARCH_TAG, "view model bind")
@@ -66,16 +65,8 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
         return searchQueryAction
     }
 
-    fun searchViewStateObservable(): Observable<SearchScreenViewState> {
-        return searchViewStateObservable
-    }
-
     private fun reduceResultToState(result : ArrayList<Repo>): SearchScreenViewState{
         Log.d(SEARCH_TAG, "reduceResultToState")
         return if (result.isNotEmpty()) SearchScreenViewState.DataState(result) else SearchScreenViewState.EmptyDataState
-    }
-
-    companion object{
-        const val SEARCH_VIEW_MODEL_TAG = "searchViewModelTag"
     }
 }

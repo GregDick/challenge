@@ -6,9 +6,9 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
-import com.example.greg.challenge.search.SearchViewModel
 import com.example.greg.challenge.search.SearchScreenView
 import com.example.greg.challenge.search.SearchScreenViewState
+import com.example.greg.challenge.search.SearchViewModel
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -110,10 +110,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private fun renderClearState() {
         Log.d(SEARCH_TAG, "rendering clear state")
-    }
-
-    companion object {
-        private const val SEARCH_ACTIVITY_LOG_TAG = "SearchActivity"
     }
 
 }
