@@ -1,8 +1,11 @@
 package com.example.greg.challenge
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.greg.challenge.results.ResultsFragment
@@ -22,6 +25,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     private val searchViewModel = SearchViewModel()
 
     private lateinit var searchQueryIntent : Observable<CharSequence>
+    private lateinit var toolbarSearchView : SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
-        (menu.findItem(R.id.search).actionView as SearchView).apply {
+        toolbarSearchView = (menu.findItem(R.id.search).actionView as SearchView).apply {
 
             searchQueryIntent = queryTextChanges()
                 .skipInitialValue()
@@ -81,6 +85,8 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     private fun renderDataState(repoList: ArrayList<Repo>) {
         Log.d(SEARCH_TAG, "rendering data state size: ${repoList.size}")
 
+        toolbarSearchView.hideKeyboard()
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
@@ -93,6 +99,11 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private fun renderClearState() {
         Log.d(SEARCH_TAG, "rendering clear state")
+    }
+
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }
