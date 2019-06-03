@@ -72,10 +72,10 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     }
 
     private fun generateListFromResponse(response: GithubSearchResponse): ArrayList<Repo> {
-        var responseList = arrayListOf<Repo>()
+        val responseList = arrayListOf<Repo>()
         if (response.items.isNotEmpty()) {
-            responseList = response.items.filterIsInstance<Repo>() as ArrayList<Repo>
-            responseList = responseList.subList(0, 19) as ArrayList<Repo> //todo: can I tell the API to only give me 20 items in the response?
+            val tempList = response.items.filterIsInstance<Repo>() as ArrayList<Repo>
+            responseList.addAll(tempList.subList(0, 20)) //todo: can I tell the API to only give me 20 items in the response?
         }
         return responseList
     }
@@ -85,7 +85,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     }
 
     companion object {
-        const val SEARCH_PROCESSOR_TAG = "searchProcessorTag"
         const val SEARCH_TAG = "[SEARCH]"
     }
 

@@ -11,17 +11,15 @@ import com.example.greg.challenge.search.SearchScreenViewState
 import com.example.greg.challenge.search.SearchViewModel
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity(), SearchScreenView {
 
-    //replace with dependency injection
+    //todo replace with dependency injection
     private val searchViewModel = SearchViewModel()
 
     private lateinit var searchQueryIntent : Observable<CharSequence>
-    private var compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +37,10 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         (menu.findItem(R.id.search).actionView as SearchView).apply {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    text_view.text = query //just for testing
-                    return true
-                }
-
-                override fun onQueryTextChange(query: String?): Boolean { return false }
-            })
+//            setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//                override fun onQueryTextSubmit(query: String?): Boolean { return true }
+//                override fun onQueryTextChange(query: String?): Boolean { return false }
+//            })
 
             searchQueryIntent = queryTextChanges()
                 .skipInitialValue()
@@ -59,20 +53,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         searchViewModel.bind(this)  //todo: does this really have to be here? ideally this should go in onCreate()
 
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-//        val viewStateDisposable = searchViewModel.searchViewStateObservable()
-//            .doOnSubscribe { Log.d(SEARCH_TAG, "subscribed  to ViewStateObservable") }
-//            .subscribe(
-//                { render(it) },
-//                { Log.d(SEARCH_TAG, "view state observable error: $it") }
-//            )
-//
-//        compositeDisposable.add(viewStateDisposable)
-
     }
 
     override fun searchQueryIntent(): Observable<CharSequence> {
