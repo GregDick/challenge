@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import com.example.greg.challenge.results.ResultsFragment
+import com.example.greg.challenge.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
 import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
 import com.example.greg.challenge.search.SearchScreenView
 import com.example.greg.challenge.search.SearchScreenViewState
@@ -37,14 +39,10 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         (menu.findItem(R.id.search).actionView as SearchView).apply {
-//            setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//                override fun onQueryTextSubmit(query: String?): Boolean { return true }
-//                override fun onQueryTextChange(query: String?): Boolean { return false }
-//            })
 
             searchQueryIntent = queryTextChanges()
                 .skipInitialValue()
-                .filter{ queryString -> queryString.length > 3 || queryString.isEmpty() }
+                .filter{ queryString -> queryString.length > 2} //todo: allow empty string to clear results?
                 .debounce(500, TimeUnit.MILLISECONDS)
 
             queryHint = getString(R.string.search_hint)
@@ -80,8 +78,13 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         Log.d(SEARCH_TAG, "rendering error state $error")
     }
 
-    private fun renderDataState(repoList: List<Repo>) {
+    private fun renderDataState(repoList: ArrayList<Repo>) {
         Log.d(SEARCH_TAG, "rendering data state size: ${repoList.size}")
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
+            .commit()
     }
 
     private fun renderLoadingState() {
