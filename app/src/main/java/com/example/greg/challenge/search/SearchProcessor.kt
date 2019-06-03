@@ -1,9 +1,9 @@
-package com.example.greg.challenge.Search
+package com.example.greg.challenge.search
 
 import android.util.Log
 import com.example.greg.challenge.GithubApiService
 import com.example.greg.challenge.GithubSearchResponse
-import com.example.greg.challenge.MVI.BaseProcessor
+import com.example.greg.challenge.mvi.BaseProcessor
 import com.example.greg.challenge.Repo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +25,7 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
 
         this.viewModel = viewModel
 
-        mapActionToResult()
+        subscribeToViewModelAction()
     }
 
     override fun unbind() {
@@ -34,8 +34,8 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
         }
     }
 
-    private fun mapActionToResult() {
-        Log.d(SEARCH_TAG, "mapActionToResult")
+    private fun subscribeToViewModelAction() {
+        Log.d(SEARCH_TAG, "subscribeToViewModelAction")
 
 //        searchResult = viewModel.searchQueryAction()
 //            .doOnSubscribe {
@@ -61,23 +61,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
         compositeDisposable.add(actionDisposable)
     }
 
-
-//    private fun observeSearchQueryAction() {
-////        return viewModel.searchQueryAction()
-////            .doOnNext { compositeDisposable.add(searchGithubRepos(it)) }
-////            .doOnSubscribe { Log.d(SEARCH_TAG, "subscribed to searchQueryAction") }
-////            .subscribe() //this is essentially subscribing to the View Intent
-//
-//        viewModel.searchQueryAction()
-//            .doOnSubscribe {
-//                Log.d(SEARCH_TAG, "subscribed to searchQueryAction")
-//                compositeDisposable.add(it)
-//            }//this is essentially subscribing to the View Intent
-//            .doOnError {Log.d(SEARCH_TAG, "onError searchQueryAction: $it")}
-//            .flatMap { searchGithubRepos(it) }
-//            .subscribe()
-//    }
-
     private fun searchGithubRepos(query : CharSequence) : Observable<ArrayList<Repo>>{
         Log.d(SEARCH_TAG, "searchGithubRepos $query")
 
@@ -100,29 +83,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     fun searchResult() : Observable<ArrayList<Repo>> {
         return searchResult
     }
-
-
-    private fun logSubscribed() {
-        Log.d(SEARCH_TAG, "onSubscribe subscribed to searchQueryResult")
-    }
-
-    private fun logComplete() {
-        Log.d(SEARCH_TAG, "searchQueryResult onComplete")
-    }
-
-    private fun logResponse(result: GithubSearchResponse) {
-        Log.d(SEARCH_TAG, result.toString())
-        if(result.items.isNotEmpty()){
-            val item : Repo? = result.items[0]
-            Log.d(SEARCH_TAG, "has item name: " + item?.name)
-
-        }
-    }
-
-    private fun logError(message: String?) {
-        Log.d(SEARCH_TAG, "error : $message")
-    }
-
 
     companion object {
         const val SEARCH_PROCESSOR_TAG = "searchProcessorTag"

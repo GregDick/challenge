@@ -1,12 +1,10 @@
-package com.example.greg.challenge.Search
+package com.example.greg.challenge.search
 
 import android.util.Log
-import androidx.annotation.MainThread
-import com.example.greg.challenge.MVI.BaseViewModel
+import com.example.greg.challenge.mvi.BaseViewModel
 import com.example.greg.challenge.Repo
-import com.example.greg.challenge.Search.SearchProcessor.Companion.SEARCH_TAG
+import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class SearchViewModel : BaseViewModel<SearchScreenView> {
@@ -48,31 +46,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
         //we don't need to modify anything about the search query so this action
         // is just the original search query intent observable being passed along
     }
-
-//    fun mapResultToState() {
-//        Log.d(SEARCH_TAG, "mapResultToState")
-//
-//        val stateDisposable = searchProcessor.searchResult()
-//            .map { result -> reduceResultToState(result) }
-//            .onErrorReturn { SearchScreenViewState.ErrorState(it.message.toString()) }
-//            .startWith { SearchScreenViewState.LoadingState }
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                Log.d(SEARCH_TAG, "onNext searchViewStateObservable: $it")
-//                view.render(it)
-//            }, {
-//                Log.d(SEARCH_TAG, "onError searchViewStateObservable: $it")
-//            }, {
-//                Log.d(SEARCH_TAG, "onComplete searchViewStateObservable")
-//            }, {
-//                Log.d(
-//                    SEARCH_TAG,
-//                    "subscribed to searchViewStateObservable"
-//                )
-//            })
-//
-//        compositeDisposable.add(stateDisposable)
-//    }
 
     fun subscribeToSearchResult() {
         val stateDisposable = searchProcessor.searchResult()

@@ -1,4 +1,4 @@
-package com.example.greg.challenge.MVI
+package com.example.greg.challenge.mvi
 
 /**
  * Emits an Observable to the ViewModel in the form of an Intent

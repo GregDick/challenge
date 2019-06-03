@@ -1,4 +1,4 @@
-package com.example.greg.challenge.MVI
+package com.example.greg.challenge.mvi
 
 /**
  * Receives Actions from the ViewModel and returns a Result

@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import com.example.greg.challenge.Search.SearchProcessor.Companion.SEARCH_TAG
-import com.example.greg.challenge.Search.SearchViewModel
-import com.example.greg.challenge.Search.SearchScreenView
-import com.example.greg.challenge.Search.SearchScreenViewState
+import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
+import com.example.greg.challenge.search.SearchViewModel
+import com.example.greg.challenge.search.SearchScreenView
+import com.example.greg.challenge.search.SearchScreenViewState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

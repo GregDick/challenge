@@ -1,4 +1,4 @@
-package com.example.greg.challenge.MVI
+package com.example.greg.challenge.mvi
 
 /**
  * Represents every state that a View could be in

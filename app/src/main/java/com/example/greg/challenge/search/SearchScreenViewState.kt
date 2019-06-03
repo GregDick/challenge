@@ -1,6 +1,6 @@
-package com.example.greg.challenge.Search
+package com.example.greg.challenge.search
 
-import com.example.greg.challenge.MVI.BaseViewState
+import com.example.greg.challenge.mvi.BaseViewState
 import com.example.greg.challenge.Repo
 
 sealed class SearchScreenViewState : BaseViewState {

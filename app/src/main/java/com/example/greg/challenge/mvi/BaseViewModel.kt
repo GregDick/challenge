@@ -1,7 +1,6 @@
-package com.example.greg.challenge.MVI
+package com.example.greg.challenge.mvi
 
-import com.example.greg.challenge.Search.SearchScreenView
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+import com.example.greg.challenge.search.SearchScreenView
 
 /**
  * Receives Intents from the View and returns a ViewState to the View

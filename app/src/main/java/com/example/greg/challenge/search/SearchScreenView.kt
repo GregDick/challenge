@@ -1,6 +1,6 @@
-package com.example.greg.challenge.Search
+package com.example.greg.challenge.search
 
-import com.example.greg.challenge.MVI.BaseView
+import com.example.greg.challenge.mvi.BaseView
 import io.reactivex.Observable
 
 interface SearchScreenView : BaseView<SearchScreenViewState>{
