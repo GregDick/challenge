@@ -8,6 +8,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import com.example.greg.challenge.details.DetailFragment
+import com.example.greg.challenge.details.DetailFragment.Companion.DETAIL_FRAGMENT_TAG
 import com.example.greg.challenge.results.ResultsFragment
 import com.example.greg.challenge.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
 import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
@@ -131,6 +133,14 @@ class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.Re
 
     private fun renderDetailsState(repo: Repo) {
         Log.d(SEARCH_TAG, "rendering details state: $repo")
+
+        toolbarSearchView.hideKeyboard()
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, DetailFragment.newInstance(repo), DETAIL_FRAGMENT_TAG)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun renderLoadingState() {
