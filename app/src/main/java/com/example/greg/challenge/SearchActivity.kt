@@ -76,10 +76,29 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private fun renderEmptyState() {
         Log.d(SEARCH_TAG, "rendering empty state ")
+
+        toolbarSearchView.hideKeyboard()
+
+        val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG) as ResultsFragment?
+
+        if(resultsFragment == null) { //first search was empty
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, ResultsFragment.newInstance(arrayListOf()), RESULTS_FRAGMENT_TAG)
+                .commit()
+        } else {
+            resultsFragment.renderEmptyState()
+        }
     }
 
     private fun renderErrorState(error: String) {
         Log.d(SEARCH_TAG, "rendering error state $error")
+
+        toolbarSearchView.hideKeyboard()
+
+        val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG) as ResultsFragment?
+
+        resultsFragment?.renderErrorState(error)
     }
 
     private fun renderDataState(repoList: ArrayList<Repo>) {
@@ -87,10 +106,14 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
         toolbarSearchView.hideKeyboard()
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
-            .commit()
+        val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG) as ResultsFragment?
+
+        if(resultsFragment == null){
+            startResultsFragment(repoList)
+        }
+        else {
+            resultsFragment.renderDataView(repoList)
+        }
     }
 
     private fun renderLoadingState() {
@@ -99,6 +122,13 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private fun renderClearState() {
         Log.d(SEARCH_TAG, "rendering clear state")
+    }
+
+    private fun startResultsFragment(repoList: ArrayList<Repo>) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
+            .commit()
     }
 
     private fun View.hideKeyboard() {

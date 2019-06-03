@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.Repo
 
-class ResultsAdapter(private val context: Context, private val resultsList: ArrayList<Repo>) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
+class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Repo>) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultsViewHolder {
@@ -20,7 +20,6 @@ class ResultsAdapter(private val context: Context, private val resultsList: Arra
         return resultsList.size
     }
 
-
     override fun onBindViewHolder(holder: ResultsViewHolder, position: Int) {
         holder.nameView.text = context.getString(R.string.owner_name, resultsList[position].owner?.login, resultsList[position].name)
         holder.description.text = resultsList[position].description
@@ -29,6 +28,7 @@ class ResultsAdapter(private val context: Context, private val resultsList: Arra
             //todo: emit Details Intent with item position
         }
     }
+
 
 
 

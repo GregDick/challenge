@@ -23,4 +23,9 @@
         <item name="android:textColor">@color/navy</item>
     </style>
 
+    <style name="errorText">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/darkGray</item>
+    </style>
+
 </resources>
