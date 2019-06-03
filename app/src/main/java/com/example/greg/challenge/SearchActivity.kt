@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.ResultsFragmentListener {
 
-    //todo replace with dependency injection
     private val searchViewModel = SearchViewModel()
 
     private lateinit var searchQueryIntent : Observable<CharSequence>
@@ -145,11 +144,12 @@ class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.Re
 
     private fun renderLoadingState() {
         Log.d(SEARCH_TAG, "rendering loading state")
-        //todo loading indicator
+        //todo: display loading indicator
     }
 
     private fun renderClearState() {
         Log.d(SEARCH_TAG, "rendering clear state")
+        //todo: clear search results
     }
 
     private fun startResultsFragment(repoList: ArrayList<Repo>) {

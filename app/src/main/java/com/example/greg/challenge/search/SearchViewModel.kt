@@ -9,7 +9,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SearchViewModel : BaseViewModel<SearchScreenView> {
 
-    //todo use dependency injection
     private val searchProcessor = SearchProcessor()
 
     private var compositeDisposable = CompositeDisposable()

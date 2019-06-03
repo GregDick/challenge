@@ -36,14 +36,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     private fun subscribeToViewModelAction() {
         Log.d(SEARCH_TAG, "subscribeToViewModelAction")
 
-//        searchResult = viewModel.searchQueryAction()
-//            .doOnSubscribe {
-//                Log.d(SEARCH_TAG, "subscribed to searchQueryAction")  //this is essentially subscribing to the View Intent
-//                compositeDisposable.add(it)
-//            }
-//            .doOnError {Log.d(SEARCH_TAG, "onError searchQueryAction: $it")}
-//            .flatMap { searchGithubRepos(it) }
-
         val actionDisposable = viewModel.searchQueryAction()
             .subscribe({
                 Log.d(SEARCH_TAG, "onNext searchQueryAction: $it")
