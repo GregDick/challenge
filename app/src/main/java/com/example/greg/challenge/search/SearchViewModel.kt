@@ -17,8 +17,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
     private lateinit var searchQueryAction : Observable<CharSequence>
 
     override fun bind(view : SearchScreenView) {
-        Log.d(SEARCH_TAG, "view model bind")
-
         this.view = view
 
         mapIntentsToActions() //subscribes to View Intent and emits an Action to the Processor
@@ -34,7 +32,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
     }
 
     private fun mapIntentsToActions() {
-        Log.d(SEARCH_TAG, "mapIntentsToActions")
         //we don't need to modify anything about the search query so this action
         // is just the original search query intent observable being passed along
 
@@ -51,7 +48,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
                 view.render(SearchScreenViewState.LoadingState)
             }
             .subscribe({
-                Log.d(SEARCH_TAG, "onNext searchResultObservable: $it")
                 view.render(reduceResultToState(it))
             }, {
                 Log.d(SEARCH_TAG, "onError searchResultObservable: $it")
@@ -66,7 +62,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
                 Log.d(SEARCH_TAG, "subscribed to searchDetailsIntent")
             }
             .subscribe({
-                Log.d(SEARCH_TAG, "onNext searchDetailsIntent: $it")
                 view.render(SearchScreenViewState.DetailState(it))  //No processing necessary because we already have the data, just render the Repo as a Detail State
             }, {
                 Log.d(SEARCH_TAG, "onError searchDetailsIntent: $it")
@@ -80,7 +75,6 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
     }
 
     private fun reduceResultToState(result : ArrayList<Repo>): SearchScreenViewState{
-        Log.d(SEARCH_TAG, "reduceResultToState")
         return if (result.isNotEmpty()) SearchScreenViewState.DataState(result) else SearchScreenViewState.EmptyDataState
     }
 }

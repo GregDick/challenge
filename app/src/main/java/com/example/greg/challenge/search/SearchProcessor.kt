@@ -20,8 +20,6 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     private lateinit var searchResult : Observable<ArrayList<Repo>>
 
     override fun bind(viewModel: SearchViewModel) {
-        Log.d(SEARCH_TAG, "processor bind")
-
         this.viewModel = viewModel
 
         subscribeToViewModelAction()
@@ -34,19 +32,13 @@ class SearchProcessor : BaseProcessor<SearchViewModel> {
     }
 
     private fun subscribeToViewModelAction() {
-        Log.d(SEARCH_TAG, "subscribeToViewModelAction")
 
         val actionDisposable = viewModel.searchQueryAction()
             .subscribe({
-                Log.d(SEARCH_TAG, "onNext searchQueryAction: $it")
                 searchResult = searchGithubRepos(it)
                 viewModel.subscribeToSearchResult() //todo: can this be called from a better place? searchResult must exist before viewModel can subscribe to it...
             }, {
                 Log.d(SEARCH_TAG, "onError searchQueryAction: $it")
-            }, {
-                Log.d(SEARCH_TAG, "onComplete searchQueryAction")
-            }, {
-                Log.d(SEARCH_TAG, "subscribed to searchQueryAction")  //this is essentially subscribing to the View Intent
             })
 
         compositeDisposable.add(actionDisposable)
