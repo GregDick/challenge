@@ -1,11 +1,12 @@
 package com.example.greg.challenge.MVI
 
 import com.example.greg.challenge.Search.SearchScreenView
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 /**
  * Receives Intents from the View and returns a ViewState to the View
  * Emits an Observable to the Processor in the form of an Action and receives a Result
- * Reduces the Result to a ViewState
+ * Reduces the Result to a ViewState and pushes the ViewState to the View
  */
 interface BaseViewModel<BaseView> {
 
@@ -20,8 +21,4 @@ interface BaseViewModel<BaseView> {
      */
     fun unbind()
 
-    /**
-     * Reduces a Result from the Processor into a State and pushes that State back to the View
-     */
-    fun reduce()
 }
