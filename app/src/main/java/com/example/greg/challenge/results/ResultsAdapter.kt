@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.Repo
 
-class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Repo>) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
-
+class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Repo>, var listener : ResultsFragment.ResultsFragmentListener) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultsViewHolder {
         return ResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.results_repo_item, parent, false))
@@ -26,11 +25,9 @@ class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Re
 
         holder.itemView.setOnClickListener {
             //todo: emit Details Intent with item position
+            listener.onResultClicked(resultsList[position])
         }
     }
-
-
-
 
     class ResultsViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         val nameView = view.findViewById<TextView>(R.id.item_owner_and_name)

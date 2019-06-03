@@ -8,5 +8,6 @@ sealed class SearchScreenViewState : BaseViewState {
     object EmptyDataState : SearchScreenViewState()
     object ClearState : SearchScreenViewState()
     data class DataState(val repoList : ArrayList<Repo>) : SearchScreenViewState()
+    data class DetailState(val repo : Repo) : SearchScreenViewState()
     data class ErrorState(val error: String) : SearchScreenViewState()
 }

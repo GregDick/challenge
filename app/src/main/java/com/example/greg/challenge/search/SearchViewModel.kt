@@ -36,14 +36,13 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
 
     private fun mapIntentsToActions() {
         Log.d(SEARCH_TAG, "mapIntentsToActions")
+        //we don't need to modify anything about the search query so this action
+        // is just the original search query intent observable being passed along
 
         searchQueryAction = view.searchQueryIntent()
             .doOnSubscribe {
                 Log.d(SEARCH_TAG, "subscribed to observeSearchQueryIntent")
             }
-
-        //we don't need to modify anything about the search query so this action
-        // is just the original search query intent observable being passed along
     }
 
     fun subscribeToSearchResult() {
@@ -60,6 +59,21 @@ class SearchViewModel : BaseViewModel<SearchScreenView> {
                 view.render(SearchScreenViewState.ErrorState(it.message.toString()))
             })
         compositeDisposable.add(stateDisposable)
+    }
+
+    fun subscribeToDetailsIntent() {
+        val detailsDisposable = view.searchDetailsIntent()
+            .doOnSubscribe {
+                Log.d(SEARCH_TAG, "subscribed to searchDetailsIntent")
+            }
+            .subscribe({
+                Log.d(SEARCH_TAG, "onNext searchDetailsIntent: $it")
+                view.render(SearchScreenViewState.DetailState(it))  //No processing necessary because we already have the data, just render the Repo as a Detail State
+            }, {
+                Log.d(SEARCH_TAG, "onError searchDetailsIntent: $it")
+                view.render(SearchScreenViewState.ErrorState(it.message.toString()))
+            })
+        compositeDisposable.add(detailsDisposable)
     }
 
     fun searchQueryAction(): Observable<CharSequence> {

@@ -19,12 +19,13 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.concurrent.TimeUnit
 
-class SearchActivity : AppCompatActivity(), SearchScreenView {
+class SearchActivity : AppCompatActivity(), SearchScreenView, ResultsFragment.ResultsFragmentListener {
 
     //todo replace with dependency injection
     private val searchViewModel = SearchViewModel()
 
     private lateinit var searchQueryIntent : Observable<CharSequence>
+    private lateinit var searchDetailsIntent : Observable<Repo>
     private lateinit var toolbarSearchView : SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +34,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        searchViewModel.unbind()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,9 +53,19 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         return true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        searchViewModel.unbind()
+    }
+
     override fun searchQueryIntent(): Observable<CharSequence> {
         Log.d(SEARCH_TAG, "emit searchQueryIntent observable")
         return searchQueryIntent
+    }
+
+    override fun searchDetailsIntent(): Observable<Repo> {
+        Log.d(SEARCH_TAG, "emit searchDetailsIntent observable")
+        return searchDetailsIntent
     }
 
     override fun render(viewState: SearchScreenViewState) {
@@ -71,7 +77,14 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             is SearchScreenViewState.DataState -> renderDataState(viewState.repoList)
             is SearchScreenViewState.ErrorState -> renderErrorState(viewState.error)
             is SearchScreenViewState.EmptyDataState -> renderEmptyState()
+            is SearchScreenViewState.DetailState -> renderDetailsState(viewState.repo)
         }
+    }
+
+    override fun onResultClicked(repo: Repo) {
+        Log.d(SEARCH_TAG, "onResultClicked")
+        searchDetailsIntent = Observable.just(repo)
+        searchViewModel.subscribeToDetailsIntent()
     }
 
     private fun renderEmptyState() {
@@ -116,8 +129,13 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         }
     }
 
+    private fun renderDetailsState(repo: Repo) {
+        Log.d(SEARCH_TAG, "rendering details state: $repo")
+    }
+
     private fun renderLoadingState() {
         Log.d(SEARCH_TAG, "rendering loading state")
+        //todo loading indicator
     }
 
     private fun renderClearState() {
