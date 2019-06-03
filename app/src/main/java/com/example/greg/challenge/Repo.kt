@@ -19,4 +19,4 @@ data class Repo(
 ) : Serializable
 
 @JsonClass(generateAdapter = true)
-data class Owner(@field:Json(name = "login") val login: String?)
+data class Owner(@field:Json(name = "login") val login: String?) : Serializable
