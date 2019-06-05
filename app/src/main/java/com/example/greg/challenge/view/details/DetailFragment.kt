@@ -1,4 +1,4 @@
-package com.example.greg.challenge.details
+package com.example.greg.challenge.view.details
 
 import android.content.Intent
 import android.net.Uri
@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.greg.challenge.R
-import com.example.greg.challenge.Repo
-import com.example.greg.challenge.search.SearchProcessor.Companion.SEARCH_TAG
+import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 
 
 class DetailFragment : Fragment() {

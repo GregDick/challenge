@@ -1,5 +1,6 @@
-package com.example.greg.challenge
+package com.example.greg.challenge.model.repository
 
+import com.example.greg.challenge.model.GithubSearchResponse
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

@@ -1,4 +1,4 @@
-package com.example.greg.challenge.results
+package com.example.greg.challenge.view.results
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
-import com.example.greg.challenge.Repo
+import com.example.greg.challenge.model.Repo
 
 class ResultsFragment : Fragment() {
 

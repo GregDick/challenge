@@ -1,4 +1,4 @@
-package com.example.greg.challenge.results
+package com.example.greg.challenge.view.results
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
-import com.example.greg.challenge.Repo
+import com.example.greg.challenge.model.Repo
 
 class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Repo>, var listener : ResultsFragment.ResultsFragmentListener) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
@@ -24,7 +24,6 @@ class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Re
         holder.description.text = resultsList[position].description
 
         holder.itemView.setOnClickListener {
-            //todo: emit Details Intent with item position
             listener.onResultClicked(resultsList[position])
         }
     }
