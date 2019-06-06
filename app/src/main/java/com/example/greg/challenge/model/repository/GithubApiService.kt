@@ -27,7 +27,7 @@ interface GithubApiService {
             return retrofit.create(GithubApiService::class.java)
         }
 
-        private const val GITHUB_API_BASE_URL = "https://api.github.com"
+        const val GITHUB_API_BASE_URL = "https://api.github.com"
         const val GITHUB_SEARCH_ENDPOINT = "/search/repositories"
     }
 

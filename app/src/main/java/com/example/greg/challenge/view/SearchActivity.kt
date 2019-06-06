@@ -8,20 +8,31 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
+import com.example.greg.challenge.viewmodel.ResultsViewModel
+import com.example.greg.challenge.viewmodel.ViewModelFactory
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_search.*
+import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), ResultsFragment.ResultsFragmentListener {
 
-
     private lateinit var toolbarSearchView : SearchView
 
+    @Inject
+    lateinit var viewModelFactory : ViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_search)
+
+        val model = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
