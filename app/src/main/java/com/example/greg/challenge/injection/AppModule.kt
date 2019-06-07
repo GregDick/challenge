@@ -1,6 +1,5 @@
 package com.example.greg.challenge.injection
 
-import android.app.Application
 import com.example.greg.challenge.model.repository.GithubApiService
 import com.example.greg.challenge.model.repository.ResultsRepository
 import dagger.Module

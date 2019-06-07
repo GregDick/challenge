@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
@@ -16,15 +17,24 @@ import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
-class SearchActivity : AppCompatActivity(), ResultsFragment.ResultsFragmentListener {
+class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  ResultsFragment.ResultsFragmentListener {
 
-    private lateinit var toolbarSearchView : SearchView
+    @Inject
+    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var viewModelFactory : ViewModelFactory
+
+    private lateinit var toolbarSearchView : SearchView
+    private lateinit var viewModel : ResultsViewModel
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -32,10 +42,12 @@ class SearchActivity : AppCompatActivity(), ResultsFragment.ResultsFragmentListe
 
         setContentView(R.layout.activity_search)
 
-        val model = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        startResultsFragment()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -46,7 +58,7 @@ class SearchActivity : AppCompatActivity(), ResultsFragment.ResultsFragmentListe
                 override fun onQueryTextChange(newText: String?): Boolean {
                     if (newText != null) {
                         if(newText.length > 2) {
-                            // todo: pass to viewModel
+                            viewModel.searchForQuery(newText)
                         }
                     }
                     return true
@@ -72,10 +84,10 @@ class SearchActivity : AppCompatActivity(), ResultsFragment.ResultsFragmentListe
         // todo: load details fragment
     }
 
-    private fun startResultsFragment(repoList: ArrayList<Repo>) {
+    private fun startResultsFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, ResultsFragment.newInstance(repoList), RESULTS_FRAGMENT_TAG)
+            .replace(R.id.fragment_container, ResultsFragment.newInstance(), RESULTS_FRAGMENT_TAG)
             .addToBackStack(null)
             .commit()
     }

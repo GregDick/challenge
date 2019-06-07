@@ -16,11 +16,9 @@ class GithubApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
 
-        //init dagger
         DaggerAppComponent.builder().application(this).build().inject(this)
     }
 
-    // this is required to setup Dagger2 for Activity
     override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
 }

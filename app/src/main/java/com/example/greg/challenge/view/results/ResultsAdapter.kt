@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 
-class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Repo>, var listener : ResultsFragment.ResultsFragmentListener) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
+class ResultsAdapter(private val context: Context?, var resultsList: ArrayList<Repo>, var listener : ResultsFragment.ResultsFragmentListener) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultsViewHolder {
         return ResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.results_repo_item, parent, false))
@@ -20,7 +20,7 @@ class ResultsAdapter(private val context: Context, var resultsList: ArrayList<Re
     }
 
     override fun onBindViewHolder(holder: ResultsViewHolder, position: Int) {
-        holder.nameView.text = context.getString(R.string.owner_name, resultsList[position].owner?.login, resultsList[position].name)
+        holder.nameView.text = context?.getString(R.string.owner_name, resultsList[position].owner?.login, resultsList[position].name)
         holder.description.text = resultsList[position].description
 
         holder.itemView.setOnClickListener {
