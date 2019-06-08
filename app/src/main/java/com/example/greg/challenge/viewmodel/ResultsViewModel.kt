@@ -9,14 +9,17 @@ import com.example.greg.challenge.model.repository.ResultsRepository
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ResultsViewModel @Inject constructor(private val resultsRepository: ResultsRepository) : ViewModel() {
 
-//    private val resultsListLiveData : MutableLiveData<List<Repo>> by lazy {
-//        MutableLiveData<List<Repo>>()
-//    }
-    private val resultsListLiveData = MutableLiveData<List<Repo>>()
+    private val resultsListLiveData : MutableLiveData<List<Repo>> by lazy {
+        MutableLiveData<List<Repo>>()
+    }
+
     private lateinit var resultsDisposable : Disposable
 
     override fun onCleared() {

@@ -58,6 +58,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
                 override fun onQueryTextChange(newText: String?): Boolean {
                     if (newText != null) {
                         if(newText.length > 2) {
+                            Log.d(SEARCH_TAG, newText)
                             viewModel.searchForQuery(newText)
                         }
                     }
