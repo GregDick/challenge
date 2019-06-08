@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -103,13 +104,13 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
     private fun SearchView.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
-        toolbarSearchView.clearFocus()
+        this.clearFocus()
     }
 
     private fun SearchView.showKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
-        toolbarSearchView.clearFocus()
+        this.requestFocus()
     }
 
     companion object {
