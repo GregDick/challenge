@@ -12,7 +12,6 @@ import com.example.greg.challenge.viewmodel.DetailViewModel
 
 class ResultsAdapter(
     private val context: Context?,
-    private var listener: ResultsFragment.ResultsFragmentListener,
     private val detailViewModel: DetailViewModel
 ) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
@@ -32,7 +31,6 @@ class ResultsAdapter(
 
         holder.itemView.setOnClickListener {
             detailViewModel.repoSelected(resultsList[position])
-            listener.onResultClicked()
         }
     }
 

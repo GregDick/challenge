@@ -32,7 +32,6 @@ class ResultsFragment : Fragment() {
     private lateinit var resultsAdapter: ResultsAdapter
     private lateinit var noResultsView : View
     private lateinit var errorView: TextView
-    private lateinit var listener: ResultsFragmentListener
     private lateinit var resultsViewModel: ResultsViewModel
     private lateinit var detailViewModel: DetailViewModel
 
@@ -51,7 +50,7 @@ class ResultsFragment : Fragment() {
         }
 
         resultsViewModel.resultsList().observe(this, Observer {
-            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel observer")
+            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")
             if(it.isNullOrEmpty()){
                 displayNoResultsView()
             } else {
@@ -63,8 +62,6 @@ class ResultsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_results, container, false)
 
-        listener = context as ResultsFragmentListener
-
         bindViews(view)
 
         setUpRecyclerView()
@@ -73,7 +70,7 @@ class ResultsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        resultsAdapter = ResultsAdapter(context, listener, detailViewModel)
+        resultsAdapter = ResultsAdapter(context, detailViewModel)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = resultsAdapter
@@ -105,10 +102,6 @@ class ResultsFragment : Fragment() {
         recyclerView.visibility = View.VISIBLE
 
         resultsAdapter.setData(dataList)
-    }
-
-    interface ResultsFragmentListener {
-        fun onResultClicked()
     }
 
     companion object {

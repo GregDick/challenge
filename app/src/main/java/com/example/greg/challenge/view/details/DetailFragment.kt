@@ -60,7 +60,7 @@ class DetailFragment : Fragment() {
         activity?.let { detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java) }
 
         detailViewModel.detail().observe(this, Observer{
-            Log.d(SEARCH_TAG, "observe repo: ${it.name}")
+            Log.d(SEARCH_TAG, "DetailFragment detailViewModel updated: ${it.name}")
             bindDataToView(it)
         })
     }

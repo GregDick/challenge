@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
@@ -16,10 +16,10 @@ import com.example.greg.challenge.view.details.DetailFragment
 import com.example.greg.challenge.view.details.DetailFragment.Companion.DETAIL_FRAGMENT_TAG
 import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
+import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  ResultsFragment.ResultsFragmentListener {
+class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -37,7 +37,8 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
     lateinit var viewModelFactory : ViewModelFactory
 
     private lateinit var toolbarSearchView : SearchView
-    private lateinit var viewModel : ResultsViewModel
+    private lateinit var resultsViewModel : ResultsViewModel
+    private lateinit var detailViewModel : DetailViewModel
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
@@ -47,10 +48,17 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
 
         setContentView(R.layout.activity_search)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
+        resultsViewModel = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
+        detailViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        detailViewModel.detail().observe(this, Observer<Repo>{
+            Log.d(SEARCH_TAG, "SearchActivity onDetailUpdated ${it.name}")
+            toolbarSearchView.hideKeyboard()
+            startDetailFragment()
+        })
 
         startResultsFragment()
     }
@@ -71,7 +79,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
                         runOnUiThread { hideKeyboard() }
                     }
                     Log.d(SEARCH_TAG, "onTextChange ${it.queryText}")
-                    viewModel.searchForQuery(it.queryText.toString())
+                    resultsViewModel.searchForQuery(it.queryText.toString())
 
                 }, {
                     Log.d(SEARCH_TAG, "searchView error ${it.localizedMessage}")
@@ -85,12 +93,6 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
         toolbarSearchView.requestFocus()
 
         return true
-    }
-
-    override fun onResultClicked() {
-        Log.d(SEARCH_TAG, "onResultClicked")
-        toolbarSearchView.hideKeyboard()
-        startDetailFragment()
     }
 
     private fun startResultsFragment() {
