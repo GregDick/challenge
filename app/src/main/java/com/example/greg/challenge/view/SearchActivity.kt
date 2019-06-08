@@ -59,7 +59,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
             queryTextChanges()
                 .filter{ queryString -> queryString.length > 2} //todo: allow empty string to clear results?
                 .distinctUntilChanged()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(300, TimeUnit.MILLISECONDS) //waits for user to finish typing before sending api request
                 .subscribe {
                     Log.d(SEARCH_TAG, "$it")
                     viewModel.searchForQuery(it as String)

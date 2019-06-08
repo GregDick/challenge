@@ -20,12 +20,12 @@
 
     <style name="secondaryText">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/mediumGray</item>
+        <item name="android:textColor">@color/lightGray</item>
     </style>
 
     <style name="itemName">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/navy</item>
+        <item name="android:textColor">@color/mediumGray</item>
     </style>
 
     <style name="errorText">

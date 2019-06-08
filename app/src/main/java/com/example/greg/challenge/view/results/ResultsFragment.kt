@@ -1,6 +1,7 @@
 package com.example.greg.challenge.view.results
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -70,7 +71,9 @@ class ResultsFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = resultsAdapter
-        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        var decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        decoration.setDrawable(ColorDrawable(resources.getColor(R.color.mediumGray, null)))
+        recyclerView.addItemDecoration(decoration)
     }
 
     private fun bindViews(view: View) {
