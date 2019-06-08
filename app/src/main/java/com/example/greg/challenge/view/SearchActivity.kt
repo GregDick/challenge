@@ -66,14 +66,13 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
                 .distinctUntilChanged()
                 .debounce(300, TimeUnit.MILLISECONDS) //waits for user to finish typing before sending api request
                 .subscribe({
-                    if (it.isSubmitted) {
-                        Log.d(SEARCH_TAG, "submit ${it.queryText}")
-                        viewModel.searchForQuery(it.queryText.toString())
-                    } else {
-                        Log.d(SEARCH_TAG, "onChanged ${it.queryText}")
-                        viewModel.searchForQuery(it.queryText as String)
-                        //todo remove detail fragment if it exists?
+                    if(it.isSubmitted){
+                        Log.d(SEARCH_TAG, "onSubmit ${it.queryText}")
+                        runOnUiThread { hideKeyboard() }
                     }
+                    Log.d(SEARCH_TAG, "onTextChange ${it.queryText}")
+                    viewModel.searchForQuery(it.queryText.toString())
+
                 }, {
                     Log.d(SEARCH_TAG, "searchView error ${it.localizedMessage}")
                 })
