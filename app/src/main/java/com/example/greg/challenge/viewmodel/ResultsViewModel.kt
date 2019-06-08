@@ -1,10 +1,14 @@
 package com.example.greg.challenge.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.model.repository.ResultsRepository
+import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ResultsViewModel @Inject constructor(private val resultsRepository: ResultsRepository) : ViewModel() {
@@ -13,14 +17,29 @@ class ResultsViewModel @Inject constructor(private val resultsRepository: Result
 //        MutableLiveData<List<Repo>>()
 //    }
     private val resultsListLiveData = MutableLiveData<List<Repo>>()
+    private lateinit var resultsDisposable : Disposable
+
+    override fun onCleared() {
+        super.onCleared()
+        if (!resultsDisposable?.isDisposed){
+            resultsDisposable?.dispose()
+        }
+    }
 
     fun searchForQuery(query: String) {
-        //todo perform search and set resultsListLiveData
 
-        val testRepo = Repo(query, null, query, 0, 0, 0, "www.google.com")
-        //post value on worker thread
-        resultsListLiveData.postValue(arrayListOf(testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo))
-//        resultsListLiveData.value = arrayListOf(testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo) //.value from main thread
+        resultsDisposable = resultsRepository.getResults(query)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Log.d(SEARCH_TAG, "searchForQuery onNext items: ${it.size}")
+                    resultsListLiveData.postValue(it)
+                },
+                {
+                    Log.e(SEARCH_TAG, "searchForQuery error ${it.message}")
+                }
+            )
+
     }
 
     fun resultsList() : LiveData<List<Repo>> {

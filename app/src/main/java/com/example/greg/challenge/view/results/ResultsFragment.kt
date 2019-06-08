@@ -2,6 +2,7 @@ package com.example.greg.challenge.view.results
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
@@ -57,6 +59,7 @@ class ResultsFragment : Fragment() {
         activity?.let { viewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java) }
 
         viewModel.resultsList().observe(this, Observer {
+            Log.d(SEARCH_TAG, "ResultsFragment viewModel observer")
             displayNewResults(it)
         })
 

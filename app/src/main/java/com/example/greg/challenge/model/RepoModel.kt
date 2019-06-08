@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
-data class GithubSearchResponse(@field:Json(name = "items") val items : List<Repo?>)
+data class GithubSearchResponse(@field:Json(name = "items") val items : List<Repo>)
 
 @JsonClass(generateAdapter = true)
 data class Repo(
