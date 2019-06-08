@@ -36,8 +36,6 @@ class ResultsFragment : Fragment() {
     private lateinit var resultsViewModel: ResultsViewModel
     private lateinit var detailViewModel: DetailViewModel
 
-    private val resultsList = arrayListOf<Repo>()
-
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -54,7 +52,11 @@ class ResultsFragment : Fragment() {
 
         resultsViewModel.resultsList().observe(this, Observer {
             Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel observer")
-            displayNewResults(it)
+            if(it.isNullOrEmpty()){
+                displayNoResultsView()
+            } else {
+                displayNewResults(it)
+            }
         })
     }
 
@@ -70,16 +72,8 @@ class ResultsFragment : Fragment() {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (resultsList.isEmpty()) { //if the first search is empty, render empty state
-            displayNoResultsView()
-        }
-    }
-
     private fun setUpRecyclerView() {
-        resultsAdapter = ResultsAdapter(context, resultsList, listener, detailViewModel)
+        resultsAdapter = ResultsAdapter(context, listener, detailViewModel)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = resultsAdapter
@@ -110,14 +104,7 @@ class ResultsFragment : Fragment() {
         errorView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
-        //todo caching this list might be unnecessary
-        resultsList.clear()
-        resultsList.addAll(dataList)
-
-        //todo this might be setting the list twice
-        resultsAdapter.resultsList.clear()
-        resultsAdapter.resultsList.addAll(dataList)
-        resultsAdapter.notifyDataSetChanged()
+        resultsAdapter.setData(dataList)
     }
 
     interface ResultsFragmentListener {

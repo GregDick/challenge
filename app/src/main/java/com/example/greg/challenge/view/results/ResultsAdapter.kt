@@ -10,10 +10,13 @@ import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.viewmodel.DetailViewModel
 
-class ResultsAdapter(private val context: Context?,
-                     var resultsList: ArrayList<Repo>,
-                     var listener : ResultsFragment.ResultsFragmentListener,
-                     val detailViewModel: DetailViewModel) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
+class ResultsAdapter(
+    private val context: Context?,
+    private var listener: ResultsFragment.ResultsFragmentListener,
+    private val detailViewModel: DetailViewModel
+) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
+
+    private val resultsList = arrayListOf<Repo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultsViewHolder {
         return ResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.results_repo_item, parent, false))
@@ -33,9 +36,17 @@ class ResultsAdapter(private val context: Context?,
         }
     }
 
+    fun setData(list : List<Repo>){
+        if (resultsList.isNotEmpty()) {
+            resultsList.clear()
+        }
+        resultsList.addAll(list)
+        notifyDataSetChanged()
+    }
+
     class ResultsViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        val nameView = view.findViewById<TextView>(R.id.item_owner_and_name)
-        val description = view.findViewById<TextView>(R.id.item_description)
+        val nameView: TextView = view.findViewById(R.id.item_owner_and_name)
+        val description: TextView = view.findViewById(R.id.item_description)
     }
 
 }
