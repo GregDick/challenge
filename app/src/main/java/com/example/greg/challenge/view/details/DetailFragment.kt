@@ -16,7 +16,6 @@ import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import com.example.greg.challenge.viewmodel.DetailViewModel
-import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -26,9 +25,6 @@ class DetailFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory : ViewModelFactory
-
-    //todo remove hardcoded test data
-    private var repo = Repo("test", null, "test", 0, 0, 0, "test")
 
     private lateinit var detailViewModel : DetailViewModel
 
@@ -54,8 +50,6 @@ class DetailFragment : Fragment() {
         numberIssues = view.findViewById(R.id.detail_num_issues)
         url = view.findViewById(R.id.detail_url)
 
-        initViews()
-
         return view
     }
 
@@ -66,10 +60,11 @@ class DetailFragment : Fragment() {
 
         detailViewModel.detail().observe(this, Observer{
             Log.d(SEARCH_TAG, "observe repo: ${it.name}")
+            bindDataToView(it)
         })
     }
 
-    private fun initViews() {
+    private fun bindDataToView(repo: Repo) {
         title.text = getString(R.string.owner_name, repo.owner?.login, repo.name)
         description.text = repo.description
         size.text = repo.size.toString()

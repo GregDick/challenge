@@ -44,6 +44,20 @@ class ResultsFragment : Fragment() {
         super.onAttach(context)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.let {
+            resultsViewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java)
+            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
+        }
+
+        resultsViewModel.resultsList().observe(this, Observer {
+            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel observer")
+            displayNewResults(it)
+        })
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_results, container, false)
 
@@ -56,18 +70,12 @@ class ResultsFragment : Fragment() {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
-        activity?.let {
-            resultsViewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java)
-            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
+        if (resultsList.isEmpty()) { //if the first search is empty, render empty state
+            displayNoResultsView()
         }
-
-        resultsViewModel.resultsList().observe(this, Observer {
-            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel observer")
-            displayNewResults(it)
-        })
     }
 
     private fun setUpRecyclerView() {
@@ -84,14 +92,6 @@ class ResultsFragment : Fragment() {
         recyclerView = view.findViewById(R.id.results_recycler_view)
         noResultsView = view.findViewById(R.id.no_results_view)
         errorView = view.findViewById(R.id.error_view)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (resultsList.isEmpty()) { //if the first search is empty, render empty state
-            displayNoResultsView()
-        }
     }
 
     private fun displayNoResultsView() {
