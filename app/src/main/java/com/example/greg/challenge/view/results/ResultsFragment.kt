@@ -42,6 +42,7 @@ class ResultsFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(SEARCH_TAG, "ResultsFRagment onCreate")
         super.onCreate(savedInstanceState)
 
         activity?.let {
