@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.greg.challenge.model.Repo
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor() : ViewModel(){
