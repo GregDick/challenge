@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -12,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.view.details.DetailFragment
+import com.example.greg.challenge.view.details.DetailFragment.Companion.DETAIL_FRAGMENT_TAG
 import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
 import com.example.greg.challenge.viewmodel.ResultsViewModel
@@ -54,7 +55,9 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
-        toolbarSearchView = (menu.findItem(R.id.search).actionView as SearchView).apply {
+        val searchMenuItem = (menu.findItem(R.id.search))
+
+        toolbarSearchView = (searchMenuItem.actionView as SearchView).apply {
 
             queryTextChanges()
                 .filter{ queryString -> queryString.length > 2} //todo: allow empty string to clear results?
@@ -63,13 +66,14 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
                 .subscribe {
                     Log.d(SEARCH_TAG, "$it")
                     viewModel.searchForQuery(it as String)
+                    //todo remove detail fragment if it exists?
                 }
 
             queryHint = getString(R.string.search_hint)
         }
 
-        toolbarSearchView.requestFocus() //todo open the search bar after the menu is created
-        toolbarSearchView.showKeyboard()
+        toolbarSearchView.setIconifiedByDefault(false) //starts the app with the search bar expanded and focused
+        toolbarSearchView.requestFocus()
 
         return true
     }
@@ -77,24 +81,35 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
     override fun onResultClicked(repo: Repo) {
         Log.d(SEARCH_TAG, "onResultClicked")
         // todo: load details fragment
+        toolbarSearchView.hideKeyboard()
+        startDetailFragment()
     }
 
     private fun startResultsFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, ResultsFragment.newInstance(), RESULTS_FRAGMENT_TAG)
+            .add(R.id.fragment_container, ResultsFragment.newInstance(), RESULTS_FRAGMENT_TAG)
+            .commit()
+    }
+
+    private fun startDetailFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, DetailFragment.newInstance(), DETAIL_FRAGMENT_TAG)
             .addToBackStack(null)
             .commit()
     }
 
-    private fun View.hideKeyboard() {
+    private fun SearchView.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
+        toolbarSearchView.clearFocus()
     }
 
-    private fun View.showKeyboard() {
+    private fun SearchView.showKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
+        toolbarSearchView.clearFocus()
     }
 
     companion object {

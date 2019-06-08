@@ -16,7 +16,8 @@ import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 
 class DetailFragment : Fragment() {
 
-    private lateinit var repo: Repo
+    //todo remove hardcoded test data
+    private var repo = Repo("test", null, "test", 0, 0, 0, "test")
 
     private lateinit var title : TextView
     private lateinit var description : TextView
@@ -28,7 +29,6 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        repo = arguments?.getSerializable(DETAIL_FRAGMENT_REPO) as Repo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,17 +63,10 @@ class DetailFragment : Fragment() {
 
 
     companion object {
-        private const val DETAIL_FRAGMENT_REPO = "detailFragmentRepo"
         const val DETAIL_FRAGMENT_TAG = "detailFragmentTAG"
 
-        fun newInstance(repo : Repo): DetailFragment {
-            val args = Bundle()
-            args.putSerializable(DETAIL_FRAGMENT_REPO, repo)
-
-            val fragment = DetailFragment()
-            fragment.arguments = args
-
-            return fragment
+        fun newInstance(): DetailFragment {
+            return DetailFragment()
         }
 
     }
