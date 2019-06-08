@@ -1,91 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/off_white"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/off_white"
+    android:layout_margin="16dp">
 
-    <TextView
-        android:id="@+id/detail_owner_and_name"
-        style="@style/itemName"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:lines="1"/>
-
-    <TextView
-        android:id="@+id/detail_description"
-        style="@style/lightPrimaryText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
-            style="@style/primaryText"
+            android:id="@+id/detail_owner_and_name"
+            style="@style/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:lines="1" />
+
+        <TextView
+            android:id="@+id/detail_description"
+            style="@style/secondaryText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/primaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="3dp"
+                android:text="@string/size" />
+
+            <TextView
+                android:id="@+id/detail_size"
+                style="@style/lightPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/primaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="3dp"
+                android:text="@string/num_forks" />
+
+            <TextView
+                android:id="@+id/detail_num_forks"
+                style="@style/lightPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/primaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="3dp"
+                android:text="@string/num_issues" />
+
+            <TextView
+                android:id="@+id/detail_num_issues"
+                style="@style/lightPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detail_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="3dp"
-            android:text="@string/size"/>
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
 
-        <TextView
-            android:id="@+id/detail_size"
-            style="@style/lightPrimaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/primaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="3dp"
-            android:text="@string/num_forks"/>
-
-        <TextView
-            android:id="@+id/detail_num_forks"
-            style="@style/lightPrimaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/primaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="3dp"
-            android:text="@string/num_issues"/>
-
-        <TextView
-            android:id="@+id/detail_num_issues"
-            style="@style/lightPrimaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/detail_url"
-        style="@style/itemName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

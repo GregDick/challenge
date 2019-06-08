@@ -18,6 +18,7 @@ import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
+import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -60,15 +61,23 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
 
         toolbarSearchView = (searchMenuItem.actionView as SearchView).apply {
 
-            queryTextChanges()
-                .filter{ queryString -> queryString.length > 2} //todo: allow empty string to clear results?
+            queryTextChangeEvents()
+                .filter { it.queryText.length > 2 } //todo: allow empty string to clear results?
                 .distinctUntilChanged()
                 .debounce(300, TimeUnit.MILLISECONDS) //waits for user to finish typing before sending api request
-                .subscribe {
-                    Log.d(SEARCH_TAG, "$it")
-                    viewModel.searchForQuery(it as String)
-                    //todo remove detail fragment if it exists?
-                }
+                .subscribe({
+                    if (it.isSubmitted) {
+                        Log.d(SEARCH_TAG, "submit ${it.queryText}")
+                        viewModel.searchForQuery(it.queryText.toString())
+                    } else {
+                        Log.d(SEARCH_TAG, "onChanged ${it.queryText}")
+                        viewModel.searchForQuery(it.queryText as String)
+                        //todo remove detail fragment if it exists?
+                    }
+                }, {
+                    Log.d(SEARCH_TAG, "searchView error ${it.localizedMessage}")
+                })
+
 
             queryHint = getString(R.string.search_hint)
         }

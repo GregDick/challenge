@@ -17,6 +17,7 @@ import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
+import com.google.android.material.button.MaterialButton
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class DetailFragment : Fragment() {
     private lateinit var size : TextView
     private lateinit var numberForks : TextView
     private lateinit var numberIssues : TextView
-    private lateinit var url : TextView
+    private lateinit var url : MaterialButton
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
