@@ -49,7 +49,7 @@ class ResultsFragment : Fragment() {
             detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
         }
 
-        resultsViewModel.resultsList().observe(viewLifecycleOwner, Observer {
+        resultsViewModel.resultsList().observe(this, Observer {
             Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")
             if(it.isNullOrEmpty()){
                 displayNoResultsView()

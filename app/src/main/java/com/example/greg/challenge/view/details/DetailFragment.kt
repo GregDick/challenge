@@ -68,7 +68,7 @@ class DetailFragment : Fragment() {
     private fun bindDataToView(repo: Repo) {
         title.text = getString(R.string.owner_name, repo.owner?.login, repo.name)
         description.text = repo.description
-        size.text = repo.size.toString()
+        size.text = formatRepoSize(repo.size)
         numberForks.text = repo.forks_count.toString()
         numberIssues.text = repo.open_issues_count.toString()
         url.text = repo.html_url
@@ -78,6 +78,23 @@ class DetailFragment : Fragment() {
             browserIntent.data = Uri.parse(repo.html_url)
             startActivity(browserIntent)
         }
+    }
+
+    private fun formatRepoSize(repoSize: Int?): String {
+        if (repoSize == null) {
+            return "null"
+        }
+        //convert to MB
+        if (repoSize in 1000..998999) {
+            return String.format("%.2f MB", (repoSize.toDouble() / 1000))
+        }
+
+        //convert to GB
+        else if (repoSize > 998999){
+            return String.format("%.2f GB", (repoSize.toDouble() / 1000000))
+        }
+
+        return "$repoSize KB"
     }
 
 
