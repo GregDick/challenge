@@ -8,8 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.viewmodel.DetailViewModel
 
-class ResultsAdapter(private val context: Context?, var resultsList: ArrayList<Repo>, var listener : ResultsFragment.ResultsFragmentListener) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
+class ResultsAdapter(private val context: Context?,
+                     var resultsList: ArrayList<Repo>,
+                     var listener : ResultsFragment.ResultsFragmentListener,
+                     val detailViewModel: DetailViewModel) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultsViewHolder {
         return ResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.results_repo_item, parent, false))
@@ -24,7 +28,8 @@ class ResultsAdapter(private val context: Context?, var resultsList: ArrayList<R
         holder.description.text = resultsList[position].description
 
         holder.itemView.setOnClickListener {
-            listener.onResultClicked(resultsList[position])
+            detailViewModel.repoSelected(resultsList[position])
+            listener.onResultClicked()
         }
     }
 

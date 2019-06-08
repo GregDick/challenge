@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
+import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
@@ -32,7 +33,8 @@ class ResultsFragment : Fragment() {
     private lateinit var noResultsView : View
     private lateinit var errorView: TextView
     private lateinit var listener: ResultsFragmentListener
-    private lateinit var viewModel: ResultsViewModel
+    private lateinit var resultsViewModel: ResultsViewModel
+    private lateinit var detailViewModel: DetailViewModel
 
     private val resultsList = arrayListOf<Repo>()
 
@@ -57,21 +59,23 @@ class ResultsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity?.let { viewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java) }
+        activity?.let {
+            resultsViewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java)
+            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
+        }
 
-        viewModel.resultsList().observe(this, Observer {
-            Log.d(SEARCH_TAG, "ResultsFragment viewModel observer")
+        resultsViewModel.resultsList().observe(this, Observer {
+            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel observer")
             displayNewResults(it)
         })
-
     }
 
     private fun setUpRecyclerView() {
-        resultsAdapter = ResultsAdapter(context, resultsList, listener)
+        resultsAdapter = ResultsAdapter(context, resultsList, listener, detailViewModel)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = resultsAdapter
-        var decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         decoration.setDrawable(ColorDrawable(resources.getColor(R.color.mediumGray, null)))
         recyclerView.addItemDecoration(decoration)
     }
@@ -117,7 +121,7 @@ class ResultsFragment : Fragment() {
     }
 
     interface ResultsFragmentListener {
-        fun onResultClicked(repo: Repo)
+        fun onResultClicked()
     }
 
     companion object {

@@ -79,7 +79,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
         return true
     }
 
-    override fun onResultClicked(repo: Repo) {
+    override fun onResultClicked() {
         Log.d(SEARCH_TAG, "onResultClicked")
         // todo: load details fragment
         toolbarSearchView.hideKeyboard()
