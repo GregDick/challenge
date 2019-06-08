@@ -57,9 +57,8 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         detailViewModel.detail().observe(this, Observer<Repo>{
             Log.d(SEARCH_TAG, "SearchActivity onDetailUpdated ${it.name}")
             startDetailFragment()
-            if (toolbarSearchView != null) { //only necessary because onCreateOptionsMenu happens after onCreate
-                toolbarSearchView.hideKeyboard()
-            }
+            //only necessary because onCreateOptionsMenu happens after onCreate
+            if (::toolbarSearchView.isInitialized) toolbarSearchView.hideKeyboard()
         })
 
         startResultsFragment()
