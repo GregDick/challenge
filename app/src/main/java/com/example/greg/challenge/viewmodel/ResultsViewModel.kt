@@ -9,9 +9,6 @@ import com.example.greg.challenge.model.repository.ResultsRepository
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ResultsViewModel @Inject constructor(private val resultsRepository: ResultsRepository) : ViewModel() {
@@ -32,7 +29,6 @@ class ResultsViewModel @Inject constructor(private val resultsRepository: Result
     fun searchForQuery(query: String) {
 
         resultsDisposable = resultsRepository.getResults(query)
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
                     Log.d(SEARCH_TAG, "searchForQuery onNext items: ${it.size}")

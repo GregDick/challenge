@@ -16,11 +16,13 @@ import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_search.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  ResultsFragment.ResultsFragmentListener {
@@ -54,22 +56,14 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector,  Results
         menuInflater.inflate(R.menu.search_menu, menu)
         toolbarSearchView = (menu.findItem(R.id.search).actionView as SearchView).apply {
 
-            setOnQueryTextListener( object : SearchView.OnQueryTextListener{
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText != null) {
-                        if(newText.length > 2) {
-                            Log.d(SEARCH_TAG, newText)
-                            viewModel.searchForQuery(newText)
-                        }
-                    }
-                    return true
+            queryTextChanges()
+                .filter{ queryString -> queryString.length > 2} //todo: allow empty string to clear results?
+                .distinctUntilChanged()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    Log.d(SEARCH_TAG, "$it")
+                    viewModel.searchForQuery(it as String)
                 }
-
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    hideKeyboard()
-                    return true
-                }
-            })
 
             queryHint = getString(R.string.search_hint)
         }

@@ -7,7 +7,6 @@ import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class ResultsRepository {
 
@@ -20,11 +19,9 @@ class ResultsRepository {
         Log.d(SEARCH_TAG, "searchGithubRepos $query")
 
         return githubApiService.searchRepos(query, MAX_RESULTS_PER_PAGE)
-            .debounce(500, TimeUnit.MILLISECONDS) //handles unintentional consecutive requests from onTextChanged
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { response -> response.items }
-//            .switchMapSingle { response -> response.items }
     }
 
 }
