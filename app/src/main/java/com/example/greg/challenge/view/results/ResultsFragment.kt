@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -33,6 +34,7 @@ class ResultsFragment : Fragment() {
     private lateinit var noResultsView : View
     private lateinit var errorView: TextView
     private lateinit var welcomeView: TextView
+    private lateinit var searchProgress: ProgressBar
 
     private lateinit var resultsViewModel: ResultsViewModel
     private lateinit var detailViewModel: DetailViewModel
@@ -91,6 +93,7 @@ class ResultsFragment : Fragment() {
         noResultsView = view.findViewById(R.id.no_results_view)
         errorView = view.findViewById(R.id.error_view)
         welcomeView = view.findViewById(R.id.welcome_message)
+        searchProgress = view.findViewById(R.id.search_progress)
     }
 
     private fun displayNoResultsView() {

@@ -5,6 +5,16 @@
     android:background="@color/off_white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--negative translationY is hacky but the built-in marginTop looks awful-->
+    <ProgressBar
+        android:id="@+id/search_progress"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationY="-6dp"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/results_recycler_view"
         android:layout_width="match_parent"
