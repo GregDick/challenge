@@ -27,19 +27,24 @@ class ResultsViewModel @Inject constructor(private val resultsRepository: Result
 
     fun searchForQuery(query: String) {
         resultsListLiveData.postValue(StatusLoading)
-        resultsDisposable = resultsRepository.getResults(query)
-            .subscribe(
-                {
-                    Log.d(SEARCH_TAG, "searchForQuery onNext items: ${it.size}")
-                    resultsListLiveData.postValue(StatusSuccess(it))
-                },
-                {
-                    Log.e(SEARCH_TAG, "searchForQuery error ${it.message}")
-                    resultsListLiveData.postValue(StatusError(it.localizedMessage))
 
-                }
-            )
+        if (query.isBlank()) {
+            resultsListLiveData.postValue(StatusSuccess(arrayListOf()))
+        } else {
+            resultsDisposable = resultsRepository.getResults(query)
+                .subscribe(
+                    {
+                        Log.d(SEARCH_TAG, "searchForQuery onNext items: ${it.size}")
+                        resultsListLiveData.postValue(StatusSuccess(it))
+                    },
+                    {
+                        Log.e(SEARCH_TAG, "searchForQuery error ${it.message}")
+                        resultsListLiveData.postValue(StatusError(it.localizedMessage))
 
+                    }
+                )
+
+        }
     }
 
     fun results() : LiveData<ResultStatus> {
