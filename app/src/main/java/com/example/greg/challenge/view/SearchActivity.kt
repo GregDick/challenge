@@ -57,8 +57,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         detailViewModel.detail().observe(this, Observer<Repo>{
             Log.d(SEARCH_TAG, "SearchActivity onDetailUpdated ${it.name}")
             startDetailFragment()
-            //only necessary because onCreateOptionsMenu happens after onCreate
-            if (::toolbarSearchView.isInitialized) toolbarSearchView.hideKeyboard()
+            if (::toolbarSearchView.isInitialized) toolbarSearchView.hideKeyboard() //only necessary because onCreateOptionsMenu happens after onCreate
         })
 
         startResultsFragment()
@@ -71,21 +70,18 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         toolbarSearchView = (searchMenuItem.actionView as SearchView).apply {
 
             queryTextChangeEvents()
-                .filter { it.queryText.length > 2 } //todo: allow empty string to clear results?
+                .filter { it.queryText.isNotEmpty() } //todo: allow empty string to clear results?
                 .distinctUntilChanged()
                 .debounce(300, TimeUnit.MILLISECONDS) //waits for user to finish typing before sending api request
                 .subscribe({
                     if(it.isSubmitted){
-                        Log.d(SEARCH_TAG, "onSubmit ${it.queryText}")
-                        runOnUiThread { hideKeyboard() }
+                        runOnUiThread { hideKeyboard() } //pressing enter hides keyboard
                     }
-                    Log.d(SEARCH_TAG, "onTextChange ${it.queryText}")
                     resultsViewModel.searchForQuery(it.queryText.toString())
-
+                    supportFragmentManager.popBackStack() //if searching from DetailFragment, this makes sure we're on ResultsFragment
                 }, {
                     Log.d(SEARCH_TAG, "searchView error ${it.localizedMessage}")
                 })
-
 
             queryHint = getString(R.string.search_hint)
         }
@@ -97,18 +93,30 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
     }
 
     private fun startResultsFragment() {
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, ResultsFragment.newInstance(), RESULTS_FRAGMENT_TAG)
-            .commit()
+        val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG)
+
+        if (resultsFragment != null) {
+            Log.d(SEARCH_TAG, "results fragment already exists")
+        } else {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, ResultsFragment.newInstance(), RESULTS_FRAGMENT_TAG)
+                .commit()
+        }
     }
 
     private fun startDetailFragment() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, DetailFragment.newInstance(), DETAIL_FRAGMENT_TAG)
-            .addToBackStack(null)
-            .commit()
+        val detailFragment = supportFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG)
+
+        if (detailFragment != null) {
+            Log.d(SEARCH_TAG, "details fragment already exists")
+        } else {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, DetailFragment.newInstance(), DETAIL_FRAGMENT_TAG)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun SearchView.hideKeyboard() {

@@ -32,6 +32,7 @@ class ResultsFragment : Fragment() {
     private lateinit var resultsAdapter: ResultsAdapter
     private lateinit var noResultsView : View
     private lateinit var errorView: TextView
+    private lateinit var welcomeView: TextView
     private lateinit var resultsViewModel: ResultsViewModel
     private lateinit var detailViewModel: DetailViewModel
 
@@ -49,15 +50,6 @@ class ResultsFragment : Fragment() {
             resultsViewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java)
             detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
         }
-
-        resultsViewModel.resultsList().observe(this, Observer {
-            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")
-            if(it.isNullOrEmpty()){
-                displayNoResultsView()
-            } else {
-                displayNewResults(it)
-            }
-        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -68,6 +60,19 @@ class ResultsFragment : Fragment() {
         setUpRecyclerView()
 
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        resultsViewModel.resultsList().observe(viewLifecycleOwner, Observer {
+            Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")
+            if(it.isNullOrEmpty()){
+                displayNoResultsView()
+            } else {
+                displayNewResults(it)
+            }
+        })
     }
 
     private fun setUpRecyclerView() {
@@ -84,6 +89,7 @@ class ResultsFragment : Fragment() {
         recyclerView = view.findViewById(R.id.results_recycler_view)
         noResultsView = view.findViewById(R.id.no_results_view)
         errorView = view.findViewById(R.id.error_view)
+        welcomeView = view.findViewById(R.id.welcome_message)
     }
 
     private fun displayNoResultsView() {
@@ -100,6 +106,7 @@ class ResultsFragment : Fragment() {
     private fun displayNewResults(dataList : List<Repo>) {
         noResultsView.visibility = View.GONE
         errorView.visibility = View.GONE
+        welcomeView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
         resultsAdapter.setData(dataList)

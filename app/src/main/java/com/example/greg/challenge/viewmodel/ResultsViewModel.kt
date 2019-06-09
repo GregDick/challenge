@@ -21,7 +21,7 @@ class ResultsViewModel @Inject constructor(private val resultsRepository: Result
 
     override fun onCleared() {
         super.onCleared()
-        if (!resultsDisposable?.isDisposed){
+        if (::resultsDisposable.isInitialized && !resultsDisposable?.isDisposed){
             resultsDisposable?.dispose()
         }
     }
