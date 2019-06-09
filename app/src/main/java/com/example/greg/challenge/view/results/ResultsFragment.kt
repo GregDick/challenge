@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -17,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.model.StatusError
+import com.example.greg.challenge.model.StatusLoading
+import com.example.greg.challenge.model.StatusSuccess
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ResultsViewModel
@@ -32,7 +37,8 @@ class ResultsFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var resultsAdapter: ResultsAdapter
     private lateinit var noResultsView : View
-    private lateinit var errorView: TextView
+    private lateinit var errorView: LinearLayout
+    private lateinit var errorText: TextView
     private lateinit var welcomeView: TextView
     private lateinit var searchProgress: ProgressBar
 
@@ -68,14 +74,23 @@ class ResultsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        resultsViewModel.resultsList().observe(viewLifecycleOwner, Observer {
+        resultsViewModel.results().observe(viewLifecycleOwner, Observer {
             Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")
-            if(it.isNullOrEmpty()){
-                displayNoResultsView()
-            } else {
-                displayNewResults(it)
+            when(it){
+                is StatusLoading -> displayLoading()
+                is StatusSuccess -> displaySuccess(it.resultsList)
+                is StatusError -> displayErrorView(it.error)
             }
         })
+    }
+
+    private fun bindViews(view: View) {
+        recyclerView = view.findViewById(R.id.results_recycler_view)
+        noResultsView = view.findViewById(R.id.no_results_view)
+        errorView = view.findViewById(R.id.error_view)
+        errorText = view.findViewById(R.id.error_text)
+        welcomeView = view.findViewById(R.id.welcome_message)
+        searchProgress = view.findViewById(R.id.search_progress)
     }
 
     private fun setUpRecyclerView() {
@@ -88,12 +103,33 @@ class ResultsFragment : Fragment() {
         recyclerView.addItemDecoration(decoration)
     }
 
-    private fun bindViews(view: View) {
-        recyclerView = view.findViewById(R.id.results_recycler_view)
-        noResultsView = view.findViewById(R.id.no_results_view)
-        errorView = view.findViewById(R.id.error_view)
-        welcomeView = view.findViewById(R.id.welcome_message)
-        searchProgress = view.findViewById(R.id.search_progress)
+    private fun displayLoading() {
+        welcomeView.visibility = View.GONE
+        searchProgress.visibility = View.VISIBLE
+    }
+
+    private fun displaySuccess(resultsList: List<Repo>) {
+        searchProgress.visibility = View.GONE
+        errorView.visibility = View.GONE
+        welcomeView.visibility = View.GONE
+
+        if(resultsList.isNullOrEmpty()){
+            displayNoResultsView()
+        } else {
+            displayNewResults(resultsList)
+        }
+    }
+
+    private fun displayErrorView(error: String) {
+        recyclerView.visibility = View.GONE
+        searchProgress.visibility = View.GONE
+
+        errorView.visibility = View.VISIBLE
+        errorText.text = getString(R.string.error_text, error)
+
+        //the least we can do is hide the keyboard while we display this awful error handling
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     private fun displayNoResultsView() {
@@ -101,19 +137,12 @@ class ResultsFragment : Fragment() {
         recyclerView.visibility = View.GONE
     }
 
-    fun displayErrorView(error: String) {
-        errorView.visibility = View.VISIBLE
-        errorView.text = getString(R.string.error_text, error)
-        recyclerView.visibility = View.GONE
-    }
-
     private fun displayNewResults(dataList : List<Repo>) {
         noResultsView.visibility = View.GONE
-        errorView.visibility = View.GONE
-        welcomeView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
         resultsAdapter.setData(dataList)
+        recyclerView.smoothScrollToPosition(0)
     }
 
     companion object {

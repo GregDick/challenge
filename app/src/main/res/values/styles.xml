@@ -30,7 +30,7 @@
 
     <style name="errorText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textColor">@color/design_default_color_error</item>
     </style>
 
 </resources>
