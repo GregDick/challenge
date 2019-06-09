@@ -33,6 +33,7 @@ class ResultsFragment : Fragment() {
     private lateinit var noResultsView : View
     private lateinit var errorView: TextView
     private lateinit var welcomeView: TextView
+
     private lateinit var resultsViewModel: ResultsViewModel
     private lateinit var detailViewModel: DetailViewModel
 
