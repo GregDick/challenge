@@ -26,6 +26,7 @@ class SearchActivityTest : TestCase() {
     }
 
 
+
     private fun mockRepoList(): ArrayList<Repo> {
         val testRepo = mockRepo()
         return arrayListOf(testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo)
@@ -35,8 +36,4 @@ class SearchActivityTest : TestCase() {
         return Repo("test", null, "test", 0, 0, 0, "test")
     }
 
-    @After
-    public override fun tearDown() {
-        super.tearDown()
-    }
 }
