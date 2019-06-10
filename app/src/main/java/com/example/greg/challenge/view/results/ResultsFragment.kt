@@ -68,6 +68,8 @@ class ResultsFragment : Fragment() {
 
         setUpRecyclerView()
 
+        displayWelcomeView()
+
         return view
     }
 
@@ -123,6 +125,7 @@ class ResultsFragment : Fragment() {
     }
 
     private fun displayErrorView(error: String) {
+        welcomeView.visibility = View.GONE
         noResultsView.visibility = View.GONE
         recyclerView.visibility = View.GONE
         searchProgress.visibility = View.GONE
@@ -136,16 +139,22 @@ class ResultsFragment : Fragment() {
     }
 
     private fun displayNoResultsView() {
+        welcomeView.visibility = View.GONE
         noResultsView.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
     }
 
     private fun displayNewResults(dataList : List<Repo>) {
+        welcomeView.visibility = View.GONE
         noResultsView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
         resultsAdapter.setData(dataList)
         recyclerView.smoothScrollToPosition(0)
+    }
+
+    private fun displayWelcomeView() {
+        welcomeView.visibility = View.VISIBLE
     }
 
     companion object {
