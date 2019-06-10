@@ -1,20 +1,21 @@
 package com.example.greg.challenge
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.example.greg.challenge.search.SearchScreenViewState
+import androidx.test.rule.ActivityTestRule
+import com.example.greg.challenge.model.Repo
+import com.example.greg.challenge.view.SearchActivity
 import junit.framework.TestCase
+import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import androidx.test.rule.ActivityTestRule
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.not
-import org.junit.After
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class SearchActivityTest : TestCase() {
@@ -32,49 +33,45 @@ class SearchActivityTest : TestCase() {
     }
 
     @Test
-    fun testRenderEmptyViewState() {
-        activityRule.activity.render(SearchScreenViewState.EmptyDataState)
-
-        onView(withId(R.id.no_results_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.results_recycler_view)).check(matches(not(isDisplayed())))
+    fun testWelcomeView() {
+        onView(withId(R.id.welcome_message)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun testRenderDataStateWithEmptyList() {
-        activityRule.activity.render(SearchScreenViewState.DataState(arrayListOf()))
+    fun testSearchViewDisplaysRecyclerView() {
+        //execute
+        onView(withId(R.id.search_src_text)).perform(typeText("TEST"))
 
-        onView(withId(R.id.no_results_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.results_recycler_view)).check(matches(not(isDisplayed())))
-    }
+        Thread.sleep(2500) //idling resource would be better
 
-    @Test
-    fun testRenderDataState() {
-        activityRule.activity.render(SearchScreenViewState.DataState(mockRepoList()))
-
-        onView(withId(R.id.no_results_view)).check(matches(not(isDisplayed())))
+        //assert
+        onView(withId(R.id.welcome_message)).check(matches(not(isDisplayed())))
         onView(withId(R.id.results_recycler_view)).check(matches(isDisplayed()))
-        onView(allOf(withId(R.id.item_description), withParent(withParentIndex(0))))
-            .check(matches(isDisplayed())).check(matches(withText("test")))
     }
 
     @Test
-    fun testRenderDetailState() {
-        activityRule.activity.render(SearchScreenViewState.DetailState(mockRepo()))
+    fun testSearchViewDisplaysNoResults() {
+        //execute
+        onView(withId(R.id.search_src_text)).perform(typeText(",.;/;[[lasjja"))
 
-        onView(withId(R.id.detail_description)).check(matches(isDisplayed())).check(matches(withText("test")))
+        Thread.sleep(2500) //idling resource would be better
+
+        //assert
+        onView(withId(R.id.welcome_message)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.results_recycler_view)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.no_results_view)).check(matches(isDisplayed()))
     }
 
-    private fun mockRepoList(): ArrayList<Repo> {
-        val testRepo = mockRepo()
-        return arrayListOf(testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo, testRepo)
-    }
+    @Test
+    fun testSearchViewBlankQueryDisplaysNoResults() {
+        //execute
+        onView(withId(R.id.search_src_text)).perform(typeText(" "))
 
-    private fun mockRepo() : Repo {
-        return Repo("test", null, "test", 0, 0, 0, "test")
-    }
+        Thread.sleep(750) //idling resource would be better
 
-    @After
-    public override fun tearDown() {
-        super.tearDown()
+        //assert
+        onView(withId(R.id.welcome_message)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.results_recycler_view)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.no_results_view)).check(matches(isDisplayed()))
     }
 }

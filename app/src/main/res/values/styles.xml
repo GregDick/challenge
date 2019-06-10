@@ -10,27 +10,27 @@
 
     <style name="primaryText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textColor">@color/mtrl_on_primary_emphasis_high_type</item>
     </style>
 
     <style name="lightPrimaryText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/mediumGray</item>
+        <item name="android:textColor">@color/mtrl_on_primary_emphasis_medium</item>
     </style>
 
     <style name="secondaryText">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/mediumGray</item>
+        <item name="android:textColor">@color/lightGray</item>
     </style>
 
     <style name="itemName">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/navy</item>
+        <item name="android:textColor">@color/mediumGray</item>
     </style>
 
     <style name="errorText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textColor">@color/design_default_color_error</item>
     </style>
 
 </resources>

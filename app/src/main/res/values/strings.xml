@@ -3,9 +3,10 @@
     <string name="search_title">Search</string>
     <string name="search_hint">Type a repo name…</string>
     <string name="no_results_found">Sorry! We couldn\'t find any results for that. Try a different search term or keywords.</string>
-    <string name="error_text">Oops! We hit an error: %s</string>
+    <string name="error_text">Well this is awkward…\nI for one blame the developer.\n%s\nPlease wait a moment and restart the app :)</string>
     <string name="owner_name">%1s/%2s</string>
     <string name="size">Size:</string>
     <string name="num_forks">Number of forks:</string>
     <string name="num_issues">Number of open issues:</string>
+    <string name="welcome_message">A search app for Github repositories \n Try searching for a repo name or keywords</string>
 </resources>
