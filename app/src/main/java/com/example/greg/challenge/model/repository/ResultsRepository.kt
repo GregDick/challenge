@@ -7,13 +7,9 @@ import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class ResultsRepository {
-
-    private val githubApiService by lazy {
-        GithubApiService.create()
-    }
-
+class ResultsRepository @Inject constructor(private val githubApiService: GithubApiService) {
 
     fun getResults(query: String): Observable<List<Repo>> {
         Log.d(SEARCH_TAG, "searchGithubRepos $query")

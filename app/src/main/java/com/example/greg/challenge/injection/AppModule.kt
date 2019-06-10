@@ -26,8 +26,14 @@ internal class AppModule {
 
     @Singleton
     @Provides
-    fun provideResultsRepository() : ResultsRepository {
-        return ResultsRepository()
+    fun provideGithubApiService(retrofit: Retrofit) : GithubApiService {
+        return retrofit.create(GithubApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideResultsRepository(githubApiService: GithubApiService) : ResultsRepository {
+        return ResultsRepository(githubApiService)
     }
 
 }

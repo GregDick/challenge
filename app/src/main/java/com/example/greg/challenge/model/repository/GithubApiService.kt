@@ -14,18 +14,6 @@ interface GithubApiService {
     fun searchRepos(@Query("q") query: String, @Query("per_page") numResults : Int): Observable<GithubSearchResponse>
 
     companion object {
-        fun create(): GithubApiService {
-
-            val retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(
-                    RxJava2CallAdapterFactory.create())
-                .addConverterFactory(
-                    MoshiConverterFactory.create())
-                .baseUrl(GITHUB_API_BASE_URL)
-                .build()
-
-            return retrofit.create(GithubApiService::class.java)
-        }
 
         const val GITHUB_API_BASE_URL = "https://api.github.com"
         const val GITHUB_SEARCH_ENDPOINT = "/search/repositories"

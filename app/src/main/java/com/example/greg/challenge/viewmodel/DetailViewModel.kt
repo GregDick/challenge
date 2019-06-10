@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.greg.challenge.model.Repo
 import javax.inject.Inject
 
-class DetailViewModel : ViewModel(){
+class DetailViewModel @Inject constructor() : ViewModel(){
 
     private val detailLiveData : MutableLiveData<Repo> by lazy {
         MutableLiveData<Repo>()
