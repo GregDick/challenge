@@ -10,12 +10,12 @@
 
     <style name="primaryText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textColor">@color/mtrl_on_primary_emphasis_high_type</item>
     </style>
 
     <style name="lightPrimaryText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/mediumGray</item>
+        <item name="android:textColor">@color/mtrl_on_primary_emphasis_medium</item>
     </style>
 
     <style name="secondaryText">
