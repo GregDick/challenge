@@ -104,11 +104,13 @@ class ResultsFragment : Fragment() {
     }
 
     private fun displayLoading() {
+        noResultsView.visibility = View.GONE
         welcomeView.visibility = View.GONE
         searchProgress.visibility = View.VISIBLE
     }
 
     private fun displaySuccess(resultsList: List<Repo>) {
+        noResultsView.visibility = View.GONE
         searchProgress.visibility = View.GONE
         errorView.visibility = View.GONE
         welcomeView.visibility = View.GONE
@@ -121,6 +123,7 @@ class ResultsFragment : Fragment() {
     }
 
     private fun displayErrorView(error: String) {
+        noResultsView.visibility = View.GONE
         recyclerView.visibility = View.GONE
         searchProgress.visibility = View.GONE
 
