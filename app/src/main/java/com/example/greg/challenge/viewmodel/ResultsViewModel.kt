@@ -29,7 +29,7 @@ class ResultsViewModel @Inject constructor(private val resultsRepository: Result
         resultsListLiveData.postValue(StatusLoading)
 
         if (query.isBlank()) {
-            resultsListLiveData.postValue(StatusSuccess(arrayListOf()))
+            resultsListLiveData.postValue(StatusSuccess(arrayListOf())) //Github returns an error for a blank search so treat it as empty results instead
         } else {
             resultsDisposable = resultsRepository.getResults(query)
                 .subscribe(
