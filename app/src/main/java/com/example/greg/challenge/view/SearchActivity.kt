@@ -92,6 +92,11 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         return true
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun startResultsFragment() {
         val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG)
 

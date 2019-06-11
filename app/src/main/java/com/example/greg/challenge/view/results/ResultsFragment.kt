@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -75,6 +76,12 @@ class ResultsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        activity?.let {
+            val appCompatActivity = activity as AppCompatActivity
+            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(false)
+        }
 
         resultsViewModel.results().observe(viewLifecycleOwner, Observer {
             Log.d(SEARCH_TAG, "ResultsFragment resultsViewModel onUpdate")

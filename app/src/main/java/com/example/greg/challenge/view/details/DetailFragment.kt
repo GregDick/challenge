@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -40,11 +41,6 @@ class DetailFragment : Fragment() {
         super.onAttach(context)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(SEARCH_TAG, "DetailFragment onCreate")
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
 
@@ -61,7 +57,13 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity?.let { detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java) }
+        activity?.let {
+            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
+
+            val appCompatActivity = activity as AppCompatActivity
+            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
 
         detailViewModel.detail().observe(viewLifecycleOwner, Observer{
             Log.d(SEARCH_TAG, "DetailFragment detailViewModel updated: ${it.name}")
