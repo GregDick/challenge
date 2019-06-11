@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
-import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import com.google.android.material.button.MaterialButton
 import dagger.android.support.AndroidSupportInjection
@@ -25,22 +24,12 @@ import javax.inject.Inject
 
 class DetailFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory : ViewModelFactory
-
-    private lateinit var detailViewModel : DetailViewModel
-
     private lateinit var title : TextView
     private lateinit var description : TextView
     private lateinit var size : TextView
     private lateinit var numberForks : TextView
     private lateinit var numberIssues : TextView
     private lateinit var url : MaterialButton
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
@@ -52,6 +41,8 @@ class DetailFragment : Fragment() {
         numberIssues = view.findViewById(R.id.detail_num_issues)
         url = view.findViewById(R.id.detail_url)
 
+        bindDataToView()
+
         return view
     }
 
@@ -59,32 +50,32 @@ class DetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         activity?.let {
-            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
 
             val appCompatActivity = activity as AppCompatActivity
             appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
         }
 
-        detailViewModel.detail().observe(viewLifecycleOwner, Observer{
-            Log.d(SEARCH_TAG, "DetailFragment detailViewModel updated: ${it.name}")
-            bindDataToView(it)
-        })
     }
 
-    private fun bindDataToView(repo: Repo) {
-        title.text = getString(R.string.owner_name, repo.owner?.login, repo.name)
-        description.text = repo.description
-        size.text = formatRepoSize(repo.size)
-        numberForks.text = repo.forks_count.toString()
-        numberIssues.text = repo.open_issues_count.toString()
-        url.text = repo.html_url
-        url.setOnClickListener {
-            Log.d(SEARCH_TAG, "starting browser")
-            val browserIntent = Intent(Intent.ACTION_VIEW)
-            browserIntent.data = Uri.parse(repo.html_url)
-            startActivity(browserIntent)
+    private fun bindDataToView() {
+        val repo = arguments?.getParcelable<Repo>(DETAIL_FRAGMENT_REPO)
+
+        repo?.let {
+            title.text = getString(R.string.owner_name, it.owner?.login, it.name)
+            description.text = it.description
+            size.text = formatRepoSize(it.size)
+            numberForks.text = it.forks_count.toString()
+            numberIssues.text = it.open_issues_count.toString()
+            url.text = it.html_url
+            url.setOnClickListener {
+                Log.d(SEARCH_TAG, "starting browser")
+                val browserIntent = Intent(Intent.ACTION_VIEW)
+                browserIntent.data = Uri.parse(repo.html_url)
+                startActivity(browserIntent)
+            }
         }
+
     }
 
     private fun formatRepoSize(repoSize: Int?): String {
@@ -107,9 +98,16 @@ class DetailFragment : Fragment() {
 
     companion object {
         const val DETAIL_FRAGMENT_TAG = "detailFragmentTAG"
+        const val DETAIL_FRAGMENT_REPO = "extra:detailRepo"
 
-        fun newInstance(): DetailFragment {
-            return DetailFragment()
+        fun newInstance(repo: Repo): DetailFragment {
+            val args = Bundle()
+            val detailFragment = DetailFragment()
+
+            args.putParcelable(DETAIL_FRAGMENT_REPO, repo)
+            detailFragment.arguments = args
+
+            return detailFragment
         }
 
     }

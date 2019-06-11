@@ -24,7 +24,6 @@ import com.example.greg.challenge.model.StatusError
 import com.example.greg.challenge.model.StatusLoading
 import com.example.greg.challenge.model.StatusSuccess
 import com.example.greg.challenge.view.SearchActivity.Companion.SEARCH_TAG
-import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
@@ -44,7 +43,6 @@ class ResultsFragment : Fragment() {
     private lateinit var searchProgress: ProgressBar
 
     private lateinit var resultsViewModel: ResultsViewModel
-    private lateinit var detailViewModel: DetailViewModel
 
 
     override fun onAttach(context: Context) {
@@ -58,7 +56,6 @@ class ResultsFragment : Fragment() {
 
         activity?.let {
             resultsViewModel = ViewModelProviders.of(it, viewModelFactory).get(ResultsViewModel::class.java)
-            detailViewModel = ViewModelProviders.of(it, viewModelFactory).get(DetailViewModel::class.java)
         }
     }
 
@@ -103,7 +100,8 @@ class ResultsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        resultsAdapter = ResultsAdapter(context, detailViewModel)
+        val listener = context as ResultsFragmentListener
+        resultsAdapter = ResultsAdapter(context, listener)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = resultsAdapter
@@ -162,6 +160,10 @@ class ResultsFragment : Fragment() {
 
     private fun displayWelcomeView() {
         welcomeView.visibility = View.VISIBLE
+    }
+
+    interface ResultsFragmentListener {
+        fun onRepoSelected(repo: Repo)
     }
 
     companion object {

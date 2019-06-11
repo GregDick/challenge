@@ -14,7 +14,4 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     internal abstract fun contributeResultsFragment(): ResultsFragment
-
-    @ContributesAndroidInjector
-    internal abstract fun contributeDetailFragment(): DetailFragment
 }

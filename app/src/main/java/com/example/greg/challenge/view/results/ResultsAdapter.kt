@@ -8,11 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
-import com.example.greg.challenge.viewmodel.DetailViewModel
 
 class ResultsAdapter(
     private val context: Context?,
-    private val detailViewModel: DetailViewModel
+    private val listener : ResultsFragment.ResultsFragmentListener
 ) : RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
 
     private val resultsList = arrayListOf<Repo>()
@@ -30,7 +29,7 @@ class ResultsAdapter(
         holder.description.text = resultsList[position].description
 
         holder.itemView.setOnClickListener {
-            detailViewModel.repoSelected(resultsList[position])
+            listener.onRepoSelected(resultsList[position])
         }
     }
 

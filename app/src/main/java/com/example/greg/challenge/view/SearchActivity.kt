@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.greg.challenge.R
 import com.example.greg.challenge.model.Repo
 import com.example.greg.challenge.view.details.DetailFragment
+import com.example.greg.challenge.view.details.DetailFragment.Companion.DETAIL_FRAGMENT_REPO
 import com.example.greg.challenge.view.details.DetailFragment.Companion.DETAIL_FRAGMENT_TAG
 import com.example.greg.challenge.view.results.ResultsFragment
 import com.example.greg.challenge.view.results.ResultsFragment.Companion.RESULTS_FRAGMENT_TAG
-import com.example.greg.challenge.viewmodel.DetailViewModel
 import com.example.greg.challenge.viewmodel.ResultsViewModel
 import com.example.greg.challenge.viewmodel.ViewModelFactory
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
+class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector, ResultsFragment.ResultsFragmentListener{
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -39,7 +39,6 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
 
     private lateinit var toolbarSearchView : SearchView
     private lateinit var resultsViewModel : ResultsViewModel
-    private lateinit var detailViewModel : DetailViewModel
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
 
@@ -50,16 +49,9 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         setContentView(R.layout.activity_search)
 
         resultsViewModel = ViewModelProviders.of(this, viewModelFactory).get(ResultsViewModel::class.java)
-        detailViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        detailViewModel.detail().observe(this, Observer<Repo>{
-            Log.d(SEARCH_TAG, "SearchActivity onDetailUpdated ${it.name}")
-            startDetailFragment()
-            if (::toolbarSearchView.isInitialized) toolbarSearchView.hideKeyboard() //only necessary because onCreateOptionsMenu happens after onCreate
-        })
 
         startResultsFragment()
     }
@@ -98,6 +90,12 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         return true
     }
 
+    override fun onRepoSelected(repo: Repo) {
+        Log.d(SEARCH_TAG, "SearchActivity onDetailUpdated ${repo.name}")
+        startDetailFragment(repo)
+        if (::toolbarSearchView.isInitialized) toolbarSearchView.hideKeyboard() //only necessary because onCreateOptionsMenu happens after onCreate
+    }
+
     private fun startResultsFragment() {
         val resultsFragment = supportFragmentManager.findFragmentByTag(RESULTS_FRAGMENT_TAG)
 
@@ -111,7 +109,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         }
     }
 
-    private fun startDetailFragment() {
+    private fun startDetailFragment(repo: Repo) {
         val detailFragment = supportFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG)
 
         if (detailFragment != null) {
@@ -119,7 +117,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         } else {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragment_container, DetailFragment.newInstance(), DETAIL_FRAGMENT_TAG)
+                .replace(R.id.fragment_container, DetailFragment.newInstance(repo), DETAIL_FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
         }

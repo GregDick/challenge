@@ -26,6 +26,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
