@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -109,7 +110,8 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector, ResultsF
         }
     }
 
-    private fun startDetailFragment(repo: Repo) {
+    @VisibleForTesting
+    internal fun startDetailFragment(repo: Repo) {
         val detailFragment = supportFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG)
 
         if (detailFragment != null) {
