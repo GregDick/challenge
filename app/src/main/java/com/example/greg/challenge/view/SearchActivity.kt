@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
 
     @Inject
@@ -78,7 +79,7 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
                         runOnUiThread { hideKeyboard() } //pressing enter hides keyboard
                     }
                     resultsViewModel.searchForQuery(it.queryText.toString())
-                    supportFragmentManager.popBackStack() //if searching from DetailFragment, this makes sure we're on ResultsFragment
+                    popDetailsFragment() //if searching from DetailFragment, this makes sure we display ResultsFragment
                 }, {
                     Log.d(SEARCH_TAG, "searchView error ${it.localizedMessage}")
                 })
@@ -124,16 +125,17 @@ class SearchActivity : AppCompatActivity(), HasSupportFragmentInjector{
         }
     }
 
+    private fun popDetailsFragment() {
+        val detailFragment = supportFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG)
+        if(detailFragment != null && supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     private fun SearchView.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
         this.clearFocus()
-    }
-
-    private fun SearchView.showKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
-        this.requestFocus()
     }
 
     companion object {
